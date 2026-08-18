@@ -16914,10 +16914,14 @@
                     e.ingredients.forEach((n) => {
                       let uNorm = n.unit.trim().toLowerCase(),
                         nNorm = n.name.toLowerCase().trim(),
+                        zzStem =
+                          nNorm.length > 3 && nNorm.endsWith("n")
+                            ? nNorm.slice(0, -1)
+                            : nNorm,
                         zzF = zzFam[uNorm],
                         zzUnit = zzF ? zzF[0] : uNorm,
                         zzFactor = zzF ? zzF[1] : 1,
-                        a = nNorm + "||" + zzUnit;
+                        a = zzStem + "||" + zzUnit;
                       (r[a] ||
                         (r[a] = {
                           name: n.name.trim(),
