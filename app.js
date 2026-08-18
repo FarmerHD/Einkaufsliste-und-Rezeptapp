@@ -14961,6 +14961,34 @@
       g = (e) => {
         "Enter" === e.key && h();
       };
+    let y = (0, i.useMemo)(() => {
+        let l = new Set(),
+          zzKey = (e) =>
+            e.name.toLowerCase().trim() + "||" + e.unit.toLowerCase().trim(),
+          zzMain = B.filter((t) => !t.catchAll),
+          zzGroups = zzMain.map((t) => ({ label: t.label, items: [] }));
+        (zzMain.forEach((t, zzI) => {
+          e.filter(
+            (zzE) => !l.has(zzKey(zzE)) && t.matchName && t.matchName(zzE),
+          ).forEach((zzE) => {
+            (l.add(zzKey(zzE)), zzGroups[zzI].items.push(zzE));
+          });
+        }),
+          zzMain.forEach((t, zzI) => {
+            t.matchUnit &&
+              e
+                .filter((zzE) => !l.has(zzKey(zzE)) && t.matchUnit(zzE))
+                .forEach((zzE) => {
+                  (l.add(zzKey(zzE)), zzGroups[zzI].items.push(zzE));
+                });
+          }));
+        let zzRest = e.filter((zzE) => !l.has(zzKey(zzE)));
+        if (zzRest.length) {
+          let zzCatchAll = B.find((t) => t.catchAll);
+          zzGroups.push({ label: zzCatchAll.label, items: zzRest });
+        }
+        return zzGroups.filter((e) => e.items.length > 0);
+      }, [e]);
     if (!e.length)
       return (0, o.jsxs)("div", {
         className:
@@ -15002,35 +15030,7 @@
           (0, o.jsx)("div", {}),
         ],
       });
-    let y = (0, i.useMemo)(() => {
-        let l = new Set(),
-          zzKey = (e) =>
-            e.name.toLowerCase().trim() + "||" + e.unit.toLowerCase().trim(),
-          zzMain = B.filter((t) => !t.catchAll),
-          zzGroups = zzMain.map((t) => ({ label: t.label, items: [] }));
-        (zzMain.forEach((t, zzI) => {
-          e.filter(
-            (zzE) => !l.has(zzKey(zzE)) && t.matchName && t.matchName(zzE),
-          ).forEach((zzE) => {
-            (l.add(zzKey(zzE)), zzGroups[zzI].items.push(zzE));
-          });
-        }),
-          zzMain.forEach((t, zzI) => {
-            t.matchUnit &&
-              e
-                .filter((zzE) => !l.has(zzKey(zzE)) && t.matchUnit(zzE))
-                .forEach((zzE) => {
-                  (l.add(zzKey(zzE)), zzGroups[zzI].items.push(zzE));
-                });
-          }));
-        let zzRest = e.filter((zzE) => !l.has(zzKey(zzE)));
-        if (zzRest.length) {
-          let zzCatchAll = B.find((t) => t.catchAll);
-          zzGroups.push({ label: zzCatchAll.label, items: zzRest });
-        }
-        return zzGroups.filter((e) => e.items.length > 0);
-      }, [e]),
-      b = e.filter((e) => e.checked).length,
+    let b = e.filter((e) => e.checked).length,
       x = e.length,
       k = Math.round((b / x) * 100),
       w = b === x;
