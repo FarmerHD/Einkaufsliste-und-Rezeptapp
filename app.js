@@ -13225,6 +13225,15 @@
   // werden diese einmalig automatisch übernommen (inkl. Foto-Upload) und der
   // alte Block danach geleert, damit das nicht bei jedem Laden erneut passiert.
   // ============================================================================
+  // Gemeinsame Normalisierung für den Zutat-Namensvergleich: entfernt ein
+  // einzelnes anhängendes "n", damit deutsche Pluralformen (Tomate/Tomaten,
+  // Karotte/Karotten, Zwiebel/Zwiebeln, ...) als derselbe Artikel erkannt
+  // werden. Wird sowohl beim Einkaufslisten-Generieren (onGenerate) als auch
+  // beim manuellen Hinzufügen ("Extra hinzufügen", onAddExtra) verwendet.
+  function zzStemName(e) {
+    let t = (e || "").toLowerCase().trim();
+    return t.length > 3 && t.endsWith("n") ? t.slice(0, -1) : t;
+  }
   function zzRecipeRowToApp(r) {
     return {
       id: r.id,
@@ -13919,6 +13928,238 @@
       cookTime: 30,
       image: "",
     });
+  // ============================================================================
+  // Schritt 5: Rezepte einfügen statt abtippen. Reiner Text-Heuristik-Parser,
+  // läuft komplett im Browser (keine Server-/KI-Anfrage). Erkennt Name,
+  // Portionen, Zeiten, Zutaten und Zubereitungsschritte aus frei eingefügtem
+  // Rezepttext (z. B. von einer Kochseite kopiert). Das Ergebnis landet in
+  // denselben, weiterhin frei bearbeitbaren Formularfeldern wie beim manuellen
+  // Ausfüllen -- die "Vorschau" vor dem Übernehmen ist das Formular selbst.
+  // ============================================================================
+  const ZZ_UNIT_ALIASES = {
+    g: "g",
+    gr: "g",
+    gramm: "g",
+    kg: "kg",
+    kilo: "kg",
+    kilogramm: "kg",
+    ml: "ml",
+    milliliter: "ml",
+    l: "l",
+    liter: "l",
+    stück: "Stück",
+    stk: "Stück",
+    st: "Stück",
+    stueck: "Stück",
+    pck: "Pck.",
+    packung: "Pck.",
+    päckchen: "Pck.",
+    paeckchen: "Pck.",
+    packet: "Pck.",
+    paket: "Pck.",
+    el: "EL",
+    esslöffel: "EL",
+    essloeffel: "EL",
+    tl: "TL",
+    teelöffel: "TL",
+    teeloeffel: "TL",
+    becher: "Becher",
+    zehe: "Zehe",
+    zehen: "Zehe",
+    bund: "Bund",
+    bünde: "Bund",
+    scheibe: "Scheibe",
+    scheiben: "Scheibe",
+    dose: "Dose",
+    dosen: "Dose",
+    prise: "Prise",
+    prisen: "Prise",
+  };
+  const ZZ_RE_ING_HEADER = /^(zutaten(sliste)?|ingredients?)\b/i;
+  const ZZ_RE_STEP_HEADER =
+    /^(zubereitung|anleitung|schritte|instructions?|directions?|vorgehen|schritt[- ]f[üu]r[- ]schritt)\b/i;
+  const ZZ_RE_NOTES_HEADER = /^(tipps?|hinweise?|notizen|anmerkungen?|notes?)\b/i;
+  function zzParseAmount(raw) {
+    let s = raw.trim().replace(/,/g, ".");
+    let mixed = s.match(/^(\d+)\s+(\d+)\/(\d+)$/);
+    if (mixed)
+      return parseFloat(mixed[1]) + parseFloat(mixed[2]) / parseFloat(mixed[3]);
+    let frac = s.match(/^(\d+)\/(\d+)$/);
+    if (frac) return parseFloat(frac[1]) / parseFloat(frac[2]);
+    let range = s.match(/^(\d+(?:\.\d+)?)\s*[-–]\s*(\d+(?:\.\d+)?)$/);
+    if (range) return (parseFloat(range[1]) + parseFloat(range[2])) / 2;
+    let n = parseFloat(s);
+    return isNaN(n) ? null : n;
+  }
+  function zzNormalizeIngredientLine(line) {
+    let s = line;
+    let zzFracs = {
+      "½": "0.5",
+      "¼": "0.25",
+      "¾": "0.75",
+      "⅓": "0.333",
+      "⅔": "0.667",
+      "⅛": "0.125",
+      "⅜": "0.375",
+      "⅝": "0.625",
+      "⅞": "0.875",
+    };
+    s = s.replace(/[½¼¾⅓⅔⅛⅜⅝⅞]/g, (c) => zzFracs[c] || c);
+    s = s.replace(/^(\d+(?:[.,]\d+)?)([a-zA-ZäöüÄÖÜß])/, "$1 $2");
+    return s;
+  }
+  function zzExtractLeadingAmount(line) {
+    let m = line.match(
+      /^(\d+\s+\d+\/\d+|\d+\/\d+|\d+(?:[.,]\d+)?(?:\s*[-–]\s*\d+(?:[.,]\d+)?)?)(?=\s|$)/,
+    );
+    if (!m) return null;
+    let amount = zzParseAmount(m[1]);
+    if (amount == null) return null;
+    return { amount, rest: line.slice(m[0].length).trim() };
+  }
+  function zzExtractUnit(rest) {
+    let m = rest.match(/^([a-zA-ZäöüÄÖÜß.]+)(?:\s+(.*))?$/);
+    if (!m || !m[2] || !m[2].trim()) return null;
+    let canonical = ZZ_UNIT_ALIASES[m[1].toLowerCase().replace(/\.$/, "")];
+    return canonical ? { unit: canonical, name: m[2].trim() } : null;
+  }
+  function zzParseIngredientLine(rawLine) {
+    let line = zzNormalizeIngredientLine(rawLine)
+      .replace(/^[\s*•▪◦‣●○–-]+/, "")
+      .trim();
+    if (!line) return null;
+    let lead = zzExtractLeadingAmount(line);
+    if (lead) {
+      let unitInfo = zzExtractUnit(lead.rest);
+      if (unitInfo)
+        return { name: unitInfo.name, amount: lead.amount, unit: unitInfo.unit };
+      if (lead.rest) return { name: lead.rest, amount: lead.amount, unit: "Stück" };
+      return null;
+    }
+    return { name: line, amount: 1, unit: "Stück" };
+  }
+  function zzGroupSteps(sectionLines) {
+    let nonBlank = sectionLines.filter((l) => l.trim());
+    if (!nonBlank.length) return [];
+    let numbered = nonBlank.filter(
+      (l) => /^\d+[.)]\s*/.test(l.trim()) || /^schritt\s*\d+/i.test(l.trim()),
+    ).length;
+    if (numbered / nonBlank.length > 0.5) {
+      let steps = [];
+      nonBlank.forEach((l) => {
+        let t = l.trim();
+        let isNew = /^\d+[.)]\s*/.test(t) || /^schritt\s*\d+/i.test(t);
+        let cleaned = t
+          .replace(/^\d+[.)]\s*/, "")
+          .replace(/^schritt\s*\d+\s*[:.]?\s*/i, "");
+        if (isNew || !steps.length) steps.push(cleaned);
+        else steps[steps.length - 1] += " " + cleaned;
+      });
+      return steps.filter(Boolean);
+    }
+    let paragraphs = [];
+    let current = [];
+    sectionLines.forEach((l) => {
+      if (l.trim()) current.push(l.trim());
+      else if (current.length) {
+        paragraphs.push(current.join(" "));
+        current = [];
+      }
+    });
+    if (current.length) paragraphs.push(current.join(" "));
+    if (paragraphs.length <= 1 && nonBlank.length > 1)
+      return nonBlank.map((l) => l.trim());
+    return paragraphs.filter(Boolean);
+  }
+  function zzExtractName(metaLines) {
+    for (let raw of metaLines) {
+      let t = raw
+        .trim()
+        .replace(/^[#\-*_•\s]+/, "")
+        .replace(/[*_\s]+$/, "");
+      if (!t) continue;
+      if (
+        /^(zutaten|zubereitung|portionen|zeit|schwierigkeit|kalorien)\b/i.test(t)
+      )
+        continue;
+      if (/^\d+\s*(personen|portionen)\b/i.test(t)) continue;
+      if (t.length > 100) continue;
+      return t;
+    }
+    return "";
+  }
+  function zzExtractPortions(text) {
+    let m =
+      text.match(/(\d+)\s*(?:bis\s*\d+\s*)?(?:personen|portionen)\b/i) ||
+      text.match(/portionen\s*:?\s*(\d+)/i) ||
+      text.match(/für\s*(\d+)\s*personen/i);
+    if (!m) return null;
+    let n = parseInt(m[1]);
+    return n >= 1 && n <= 50 ? n : null;
+  }
+  function zzExtractMinutes(text, labelRe) {
+    let re = new RegExp(
+      "(?:" +
+        labelRe.source +
+        ")\\s*:?\\s*(?:ca\\.?\\s*)?(\\d+)\\s*(minuten|minute|min|stunden|stunde|std|h)\\b",
+      "i",
+    );
+    let m = text.match(re);
+    if (!m) return null;
+    let val = parseInt(m[1]);
+    if (isNaN(val)) return null;
+    let minutes = /^(stunden|stunde|std|h)/i.test(m[2]) ? val * 60 : val;
+    return Math.min(minutes, 600);
+  }
+  function zzParseRecipeText(raw) {
+    let text = (raw || "").replace(/\r\n?/g, "\n");
+    let trimmed = text.split("\n").map((l) => l.trim());
+    let zzHead = (l) =>
+      l
+        .replace(/^[#*_\s]+/, "")
+        .replace(/[*_\s]+$/, "");
+    let headerCandidates = trimmed.map(zzHead);
+    let ingIdx = headerCandidates.findIndex((l) => ZZ_RE_ING_HEADER.test(l));
+    let stepIdx = headerCandidates.findIndex(
+      (l, i) => i > ingIdx && ZZ_RE_STEP_HEADER.test(l),
+    );
+    let notesIdx = headerCandidates.findIndex(
+      (l, i) => i > Math.max(ingIdx, stepIdx) && ZZ_RE_NOTES_HEADER.test(l),
+    );
+    let ingredientItems = [];
+    let stepsList = [];
+    let metaLines = ingIdx >= 0 ? trimmed.slice(0, ingIdx) : trimmed.slice(0, 3);
+    if (ingIdx >= 0) {
+      let ingEnd = stepIdx >= 0 ? stepIdx : notesIdx >= 0 ? notesIdx : trimmed.length;
+      let ingredientLines = trimmed.slice(ingIdx + 1, ingEnd);
+      ingredientItems = ingredientLines
+        .filter(Boolean)
+        .map(zzParseIngredientLine)
+        .filter(Boolean)
+        .map((x) => ({ id: crypto.randomUUID(), ...x }));
+      let stepsStart = stepIdx >= 0 ? stepIdx + 1 : ingEnd;
+      let stepsEnd = notesIdx >= 0 ? notesIdx : trimmed.length;
+      stepsList = zzGroupSteps(trimmed.slice(stepsStart, stepsEnd));
+    }
+    let notes =
+      notesIdx >= 0 ? trimmed.slice(notesIdx + 1).join("\n").trim() : "";
+    return {
+      name: zzExtractName(metaLines),
+      portions: zzExtractPortions(text),
+      prepTime: zzExtractMinutes(
+        text,
+        /vorbereitungszeit|zubereitungszeit|prep\s*time/i,
+      ),
+      cookTime: zzExtractMinutes(
+        text,
+        /koch\s*zeit|backzeit|gar\s*zeit|cook\s*time/i,
+      ),
+      notes,
+      ingredients: ingredientItems,
+      steps: stepsList,
+      structured: ingIdx >= 0,
+    };
+  }
   function A({ recipes: e, onSave: t, onDelete: n }) {
     let [r, a] = (0, i.useState)(null),
       [l, s] = (0, i.useState)(null),
@@ -13926,10 +14167,16 @@
       [d, f] = (0, i.useState)("Alle"),
       [p, m] = (0, i.useState)("basics"),
       h = (0, i.useRef)(null),
+      [zzImportOpen, zzSetImportOpen] = (0, i.useState)(!1),
+      [zzImportText, zzSetImportText] = (0, i.useState)(""),
       [O, D] = (0, i.useState)(R()),
       F = (e, t) => D((n) => ({ ...n, [e]: t })),
       I = (0, i.useCallback)(() => {
-        (D(R()), a(null), m("basics"));
+        (D(R()),
+          a(null),
+          m("basics"),
+          zzSetImportOpen(!1),
+          zzSetImportText(""));
       }, [a]),
       $ = (0, i.useCallback)(
         (e, t, n) =>
@@ -13985,9 +14232,20 @@
                       ? "Änderungen speichern oder abbrechen."
                       : "Füge ein neues Rezept hinzu.",
                   }),
+                  !r &&
+                    (0, o.jsx)("button", {
+                      type: "button",
+                      onClick: () => zzSetImportOpen((v) => !v),
+                      className:
+                        "mt-2 text-xs font-semibold text-emerald-700 hover:text-emerald-900 transition-colors",
+                      children: zzImportOpen
+                        ? "Rezept einfügen schließen"
+                        : "Rezept einfügen statt abtippen →",
+                    }),
                 ],
               }),
-              (0, o.jsx)("div", {
+              !zzImportOpen &&
+                (0, o.jsx)("div", {
                 className: "flex border-b border-stone-100",
                 children: B.map((e) =>
                   (0, o.jsxs)(
@@ -14004,7 +14262,89 @@
               (0, o.jsxs)("div", {
                 className: "px-4 sm:px-6 pt-7 sm:pt-8 pb-5 sm:pb-6 space-y-5",
                 children: [
-                  "basics" === p &&
+                  zzImportOpen &&
+                    (0, o.jsxs)("div", {
+                      className: "space-y-3",
+                      children: [
+                        (0, o.jsx)("p", {
+                          className: "text-xs text-stone-400",
+                          children:
+                            "Rezepttext einfügen (z. B. von einer Kochseite kopiert). Name, Portionen, Zeiten, Zutaten und Zubereitung werden automatisch erkannt und unten in die Felder übernommen — bitte danach kurz prüfen. Am zuverlässigsten funktioniert es, wenn der Text Abschnitte wie „Zutaten“ und „Zubereitung“ enthält.",
+                        }),
+                        (0, o.jsx)("textarea", {
+                          value: zzImportText,
+                          onChange: (e) => zzSetImportText(e.target.value),
+                          placeholder:
+                            "Spaghetti Bolognese\nFür 4 Portionen\n\nZutaten\n500 g Hackfleisch\n2 Zwiebeln\n400 g Tomaten\n\nZubereitung\n1. Zwiebeln anbraten\n2. Hackfleisch dazugeben und anbraten\n3. Tomaten dazugeben und köcheln lassen",
+                          rows: 12,
+                          className:
+                            "w-full px-4 py-3 rounded-xl border border-stone-200 bg-stone-50 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all placeholder:text-stone-300 resize-none",
+                        }),
+                        (0, o.jsxs)("div", {
+                          className: "flex gap-2",
+                          children: [
+                            (0, o.jsx)("button", {
+                              type: "button",
+                              onClick: () => {
+                                (zzSetImportOpen(!1), zzSetImportText(""));
+                              },
+                              className:
+                                "px-4 py-2.5 rounded-xl border border-stone-200 text-sm font-medium text-stone-600 hover:bg-stone-50 transition-colors",
+                              children: "Abbrechen",
+                            }),
+                            (0, o.jsx)("button", {
+                              type: "button",
+                              disabled: !zzImportText.trim(),
+                              onClick: () => {
+                                let zzParsed = zzParseRecipeText(zzImportText);
+                                (D((prev) => ({
+                                  ...prev,
+                                  name: zzParsed.name || prev.name,
+                                  portions: zzParsed.portions || prev.portions,
+                                  prepTime:
+                                    null != zzParsed.prepTime
+                                      ? zzParsed.prepTime
+                                      : prev.prepTime,
+                                  cookTime:
+                                    null != zzParsed.cookTime
+                                      ? zzParsed.cookTime
+                                      : prev.cookTime,
+                                  ingredients: zzParsed.ingredients.length
+                                    ? zzParsed.ingredients
+                                    : prev.ingredients,
+                                  steps: zzParsed.steps.length
+                                    ? zzParsed.steps
+                                    : prev.steps,
+                                  notes: zzParsed.notes || prev.notes,
+                                })),
+                                  zzParsed.structured
+                                    ? (zzParsed.ingredients.length ||
+                                      zzParsed.steps.length
+                                        ? ee.toast.success(
+                                            `${zzParsed.ingredients.length} Zutat${1 === zzParsed.ingredients.length ? "" : "en"} und ${zzParsed.steps.length} Schritt${1 === zzParsed.steps.length ? "" : "e"} erkannt — bitte prüfen.`,
+                                          )
+                                        : ee.toast(
+                                            "Abschnitt „Zutaten“ gefunden, aber keine Zeilen erkannt — bitte prüfen.",
+                                            { icon: "ℹ️" },
+                                          ))
+                                    : ee.toast(
+                                        "Keine „Zutaten“-Überschrift gefunden — Zutaten und Zubereitung bitte von Hand ergänzen. Name/Portionen/Zeiten wurden übernommen, falls erkennbar.",
+                                        { icon: "ℹ️" },
+                                      ),
+                                  zzSetImportOpen(!1),
+                                  zzSetImportText(""),
+                                  m("basics"));
+                              },
+                              className:
+                                "flex-1 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-semibold transition-colors",
+                              children: "Erkennen & übernehmen",
+                            }),
+                          ],
+                        }),
+                      ],
+                    }),
+                  !zzImportOpen &&
+                    "basics" === p &&
                     (0, o.jsxs)(o.Fragment, {
                       children: [
                         (0, o.jsxs)("div", {
@@ -14385,7 +14725,8 @@
                         }),
                       ],
                     }),
-                  "steps" === p &&
+                  !zzImportOpen &&
+                    "steps" === p &&
                     (0, o.jsxs)("div", {
                       className: "space-y-3",
                       children: [
@@ -14447,7 +14788,8 @@
                         }),
                       ],
                     }),
-                  "notes" === p &&
+                  !zzImportOpen &&
+                    "notes" === p &&
                     (0, o.jsxs)("div", {
                       className: "space-y-1.5",
                       children: [
@@ -17441,21 +17783,35 @@
                   });
                 },
                 onAddExtra: (e) => {
-                  c((t) =>
-                    t.find(
-                      (t) =>
-                        t.name.toLowerCase().trim() ===
-                          e.name.toLowerCase().trim() &&
-                        t.unit.toLowerCase().trim() ===
-                          e.unit.toLowerCase().trim(),
-                    )
-                      ? (ee.toast.error("Artikel bereits auf der Liste"), t)
-                      : (ee.toast.success(`"${e.name}" hinzugef\xfcgt`),
-                        [
-                          ...t,
-                          { ...e, name: e.name.trim(), unit: e.unit.trim() },
-                        ]),
-                  );
+                  c((t) => {
+                    let zzUnit = e.unit.toLowerCase().trim(),
+                      zzStem = zzStemName(e.name),
+                      zzMatch = t.find(
+                        (t) =>
+                          zzStemName(t.name) === zzStem &&
+                          t.unit.toLowerCase().trim() === zzUnit,
+                      );
+                    if (zzMatch) {
+                      let zzNeu = +(
+                        (zzMatch.amount || 0) + (e.amount || 0)
+                      ).toFixed(2);
+                      return (
+                        ee.toast.success(
+                          `"${zzMatch.name}" aktualisiert (${zzNeu} ${zzMatch.unit})`,
+                        ),
+                        t.map((t) =>
+                          t === zzMatch ? { ...t, amount: zzNeu } : t,
+                        )
+                      );
+                    }
+                    return (
+                      ee.toast.success(`"${e.name}" hinzugef\xfcgt`),
+                      [
+                        ...t,
+                        { ...e, name: e.name.trim(), unit: e.unit.trim() },
+                      ]
+                    );
+                  });
                 },
                 onRemoveExtra: (e, t) => {
                   (c((n) => n.filter((n) => !(n.name === e && n.unit === t))),
@@ -17467,8 +17823,7 @@
                       r.some(
                         (r) =>
                           (r.name !== e || r.unit !== t) &&
-                          r.name.toLowerCase().trim() ===
-                            n.name.toLowerCase().trim() &&
+                          zzStemName(r.name) === zzStemName(n.name) &&
                           r.unit.toLowerCase().trim() ===
                             n.unit.toLowerCase().trim(),
                       )
