@@ -18059,11 +18059,40 @@
       ],
     });
   };
+  // ============================================================================
+  // Login: Benutzername (technisch die Supabase-"E-Mail", muss aber keine echte
+  // Adresse sein und keine Mail empfangen können, um sich täglich anzumelden) +
+  // Passwort ist jetzt die Standard-Anmeldung (zzMode "password"). Der bisherige
+  // Login-Link per E-Mail bleibt als Rückfalloption erreichbar (zzMode
+  // "magiclink"), ebenso "Passwort vergessen" (zzMode "forgot") -- beide
+  // nutzen weiterhin ganz normal Supabase Auth, kein eigener Server nötig.
+  // ============================================================================
   function zzLogin() {
-    let [zzEmail, zzSetEmail] = (0, i.useState)(""),
+    let [zzMode, zzSetMode] = (0, i.useState)("password"),
+      [zzEmail, zzSetEmail] = (0, i.useState)(""),
+      [zzPassword, zzSetPassword] = (0, i.useState)(""),
       [zzSent, zzSetSent] = (0, i.useState)(!1),
+      [zzResetSent, zzSetResetSent] = (0, i.useState)(!1),
       [zzBusy, zzSetBusy] = (0, i.useState)(!1),
-      zzSubmit = async () => {
+      zzSubmitPassword = async () => {
+        let email = zzEmail.trim();
+        if (!email || !zzPassword) return;
+        zzSetBusy(!0);
+        let { error } = await window.supabaseClient.auth.signInWithPassword({
+          email,
+          password: zzPassword,
+        });
+        (zzSetBusy(!1),
+          error &&
+            window.ee &&
+            ee.toast &&
+            ee.toast.error(
+              /invalid/i.test(error.message)
+                ? "Benutzername oder Passwort falsch."
+                : "Fehler: " + error.message,
+            ));
+      },
+      zzSubmitMagicLink = async () => {
         let email = zzEmail.trim();
         if (!email) return;
         zzSetBusy(!0);
@@ -18077,6 +18106,21 @@
               ee.toast &&
               ee.toast.error("Fehler: " + error.message)
             : zzSetSent(!0));
+      },
+      zzSubmitReset = async () => {
+        let email = zzEmail.trim();
+        if (!email) return;
+        zzSetBusy(!0);
+        let { error } =
+          await window.supabaseClient.auth.resetPasswordForEmail(email, {
+            redirectTo: window.location.href,
+          });
+        (zzSetBusy(!1),
+          error
+            ? window.ee &&
+              ee.toast &&
+              ee.toast.error("Fehler: " + error.message)
+            : zzSetResetSent(!0));
       };
     return (0, o.jsx)("div", {
       className:
@@ -18093,44 +18137,267 @@
             className: "font-display text-xl text-stone-800 mb-1 text-center",
             children: "Meine Rezepte",
           }),
-          zzSent
-            ? (0, o.jsx)("p", {
-                className: "text-sm text-stone-500 mt-3 text-center",
-                children:
-                  "Link verschickt! \xd6ffne dein E-Mail-Postfach und klicke auf den Link zum Einloggen.",
-              })
-            : (0, o.jsxs)("div", {
-                children: [
-                  (0, o.jsx)("p", {
-                    className: "text-sm text-stone-500 mb-5 text-center",
-                    children: "Melde dich mit deiner E-Mail-Adresse an.",
-                  }),
-                  (0, o.jsx)("input", {
-                    type: "email",
-                    value: zzEmail,
-                    onChange: (e) => zzSetEmail(e.target.value),
-                    onKeyDown: (e) => {
-                      "Enter" === e.key && zzSubmit();
-                    },
-                    placeholder: "deine@email.de",
-                    className:
-                      "w-full px-4 py-2.5 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all mb-3",
-                  }),
-                  (0, o.jsx)("button", {
-                    onClick: zzSubmit,
-                    disabled: zzBusy,
-                    className:
-                      "w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-emerald-700 hover:bg-emerald-800 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-colors",
-                    children: zzBusy ? "Sende\u2026" : "Link senden",
-                  }),
-                ],
-              }),
+          "password" === zzMode &&
+            (0, o.jsxs)("div", {
+              children: [
+                (0, o.jsx)("p", {
+                  className: "text-sm text-stone-500 mb-5 text-center",
+                  children: "Melde dich mit Benutzername und Passwort an.",
+                }),
+                (0, o.jsx)("input", {
+                  type: "email",
+                  value: zzEmail,
+                  onChange: (e) => zzSetEmail(e.target.value),
+                  onKeyDown: (e) => {
+                    "Enter" === e.key && zzSubmitPassword();
+                  },
+                  placeholder: "Benutzername",
+                  autoComplete: "username",
+                  className:
+                    "w-full px-4 py-2.5 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all mb-3",
+                }),
+                (0, o.jsx)("input", {
+                  type: "password",
+                  value: zzPassword,
+                  onChange: (e) => zzSetPassword(e.target.value),
+                  onKeyDown: (e) => {
+                    "Enter" === e.key && zzSubmitPassword();
+                  },
+                  placeholder: "Passwort",
+                  autoComplete: "current-password",
+                  className:
+                    "w-full px-4 py-2.5 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all mb-3",
+                }),
+                (0, o.jsx)("button", {
+                  onClick: zzSubmitPassword,
+                  disabled: zzBusy,
+                  className:
+                    "w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-emerald-700 hover:bg-emerald-800 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-colors mb-3",
+                  children: zzBusy ? "Melde an…" : "Anmelden",
+                }),
+                (0, o.jsxs)("div", {
+                  className: "flex items-center justify-between text-xs",
+                  children: [
+                    (0, o.jsx)("button", {
+                      type: "button",
+                      onClick: () => zzSetMode("forgot"),
+                      className: "text-stone-400 hover:text-stone-600",
+                      children: "Passwort vergessen?",
+                    }),
+                    (0, o.jsx)("button", {
+                      type: "button",
+                      onClick: () => zzSetMode("magiclink"),
+                      className:
+                        "text-emerald-700 hover:text-emerald-900 font-medium",
+                      children: "Login-Link per E-Mail",
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          "magiclink" === zzMode &&
+            (zzSent
+              ? (0, o.jsxs)("div", {
+                  children: [
+                    (0, o.jsx)("p", {
+                      className: "text-sm text-stone-500 mt-3 mb-4 text-center",
+                      children:
+                        "Link verschickt! \xd6ffne dein E-Mail-Postfach und klicke auf den Link zum Einloggen.",
+                    }),
+                    (0, o.jsx)("button", {
+                      type: "button",
+                      onClick: () => {
+                        (zzSetMode("password"), zzSetSent(!1));
+                      },
+                      className:
+                        "w-full text-center text-xs text-stone-400 hover:text-stone-600",
+                      children: "Zur\xfcck zum Passwort-Login",
+                    }),
+                  ],
+                })
+              : (0, o.jsxs)("div", {
+                  children: [
+                    (0, o.jsx)("p", {
+                      className: "text-sm text-stone-500 mb-5 text-center",
+                      children: "Melde dich mit deiner E-Mail-Adresse an.",
+                    }),
+                    (0, o.jsx)("input", {
+                      type: "email",
+                      value: zzEmail,
+                      onChange: (e) => zzSetEmail(e.target.value),
+                      onKeyDown: (e) => {
+                        "Enter" === e.key && zzSubmitMagicLink();
+                      },
+                      placeholder: "deine@email.de",
+                      className:
+                        "w-full px-4 py-2.5 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all mb-3",
+                    }),
+                    (0, o.jsx)("button", {
+                      onClick: zzSubmitMagicLink,
+                      disabled: zzBusy,
+                      className:
+                        "w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-emerald-700 hover:bg-emerald-800 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-colors mb-3",
+                      children: zzBusy ? "Sende…" : "Link senden",
+                    }),
+                    (0, o.jsx)("button", {
+                      type: "button",
+                      onClick: () => zzSetMode("password"),
+                      className:
+                        "w-full text-center text-xs text-stone-400 hover:text-stone-600",
+                      children: "Zur\xfcck zum Passwort-Login",
+                    }),
+                  ],
+                })),
+          "forgot" === zzMode &&
+            (zzResetSent
+              ? (0, o.jsxs)("div", {
+                  children: [
+                    (0, o.jsx)("p", {
+                      className: "text-sm text-stone-500 mt-3 mb-4 text-center",
+                      children:
+                        "E-Mail verschickt! \xd6ffne dein Postfach und folge dem Link, um ein neues Passwort zu setzen.",
+                    }),
+                    (0, o.jsx)("button", {
+                      type: "button",
+                      onClick: () => {
+                        (zzSetMode("password"), zzSetResetSent(!1));
+                      },
+                      className:
+                        "w-full text-center text-xs text-stone-400 hover:text-stone-600",
+                      children: "Zur\xfcck zum Login",
+                    }),
+                  ],
+                })
+              : (0, o.jsxs)("div", {
+                  children: [
+                    (0, o.jsx)("p", {
+                      className: "text-sm text-stone-500 mb-5 text-center",
+                      children:
+                        "Gib deinen Benutzernamen ein, wir schicken dir einen Link zum Zur\xfccksetzen.",
+                    }),
+                    (0, o.jsx)("input", {
+                      type: "email",
+                      value: zzEmail,
+                      onChange: (e) => zzSetEmail(e.target.value),
+                      onKeyDown: (e) => {
+                        "Enter" === e.key && zzSubmitReset();
+                      },
+                      placeholder: "Benutzername",
+                      className:
+                        "w-full px-4 py-2.5 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all mb-3",
+                    }),
+                    (0, o.jsx)("button", {
+                      onClick: zzSubmitReset,
+                      disabled: zzBusy,
+                      className:
+                        "w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-emerald-700 hover:bg-emerald-800 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-colors mb-3",
+                      children: zzBusy
+                        ? "Sende…"
+                        : "Link zum Zur\xfccksetzen senden",
+                    }),
+                    (0, o.jsx)("button", {
+                      type: "button",
+                      onClick: () => zzSetMode("password"),
+                      className:
+                        "w-full text-center text-xs text-stone-400 hover:text-stone-600",
+                      children: "Zur\xfcck zum Login",
+                    }),
+                  ],
+                })),
+        ],
+      }),
+    });
+  }
+  function zzSetNewPassword({ onDone }) {
+    let [zzPw, zzSetPw] = (0, i.useState)(""),
+      [zzPw2, zzSetPw2] = (0, i.useState)(""),
+      [zzBusy, zzSetBusy] = (0, i.useState)(!1),
+      zzSubmit = async () => {
+        if (!zzPw || zzPw.length < 6) {
+          window.ee &&
+            ee.toast &&
+            ee.toast.error("Passwort muss mindestens 6 Zeichen haben.");
+          return;
+        }
+        if (zzPw !== zzPw2) {
+          window.ee &&
+            ee.toast &&
+            ee.toast.error("Passw\xf6rter stimmen nicht \xfcberein.");
+          return;
+        }
+        zzSetBusy(!0);
+        let { error } = await window.supabaseClient.auth.updateUser({
+          password: zzPw,
+        });
+        (zzSetBusy(!1),
+          error
+            ? window.ee &&
+              ee.toast &&
+              ee.toast.error("Fehler: " + error.message)
+            : (window.ee &&
+                ee.toast &&
+                ee.toast.success("Neues Passwort gespeichert."),
+              onDone()));
+      };
+    return (0, o.jsx)("div", {
+      className:
+        "flex-1 min-h-0 bg-[#FAFAF8] flex items-center justify-center px-4",
+      children: (0, o.jsxs)("div", {
+        className: "bg-white rounded-2xl border border-stone-200 shadow-sm p-6",
+        style: { maxWidth: 380, width: "100%" },
+        children: [
+          (0, o.jsx)("div", {
+            className: "text-4xl mb-3 text-center",
+            children: "🔑",
+          }),
+          (0, o.jsx)("h1", {
+            className: "font-display text-xl text-stone-800 mb-1 text-center",
+            children: "Neues Passwort setzen",
+          }),
+          (0, o.jsx)("p", {
+            className: "text-sm text-stone-500 mb-5 text-center",
+            children: "W\xe4hle ein neues Passwort f\xfcr den Login.",
+          }),
+          (0, o.jsx)("input", {
+            type: "password",
+            value: zzPw,
+            onChange: (e) => zzSetPw(e.target.value),
+            placeholder: "Neues Passwort",
+            autoComplete: "new-password",
+            className:
+              "w-full px-4 py-2.5 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all mb-3",
+          }),
+          (0, o.jsx)("input", {
+            type: "password",
+            value: zzPw2,
+            onChange: (e) => zzSetPw2(e.target.value),
+            onKeyDown: (e) => {
+              "Enter" === e.key && zzSubmit();
+            },
+            placeholder: "Passwort wiederholen",
+            autoComplete: "new-password",
+            className:
+              "w-full px-4 py-2.5 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all mb-3",
+          }),
+          (0, o.jsx)("button", {
+            onClick: zzSubmit,
+            disabled: zzBusy,
+            className:
+              "w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-emerald-700 hover:bg-emerald-800 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-colors",
+            children: zzBusy ? "Speichere…" : "Passwort speichern",
+          }),
         ],
       }),
     });
   }
   function zzAppGate() {
     let [zzSession, zzSetSession] = (0, i.useState)(void 0);
+    // "PASSWORD_RECOVERY": Supabase loggt beim Klick auf einen Passwort-
+    // Zuruecksetzen-Link (siehe zzLogin, zzSubmitReset) automatisch mit einer
+    // voruebergehenden Sitzung ein -- ohne diese Weiche wuerde man direkt
+    // (noch mit dem alten Passwort) in der App landen, statt zuerst ein neues
+    // Passwort setzen zu koennen.
+    let [zzRecovery, zzSetRecovery] = (0, i.useState)(!1);
     return (
       (0, i.useEffect)(() => {
         if (!window.supabaseClient) {
@@ -18141,7 +18408,10 @@
           .getSession()
           .then(({ data: { session: e } }) => zzSetSession(!!e));
         let { data: zzSub } = window.supabaseClient.auth.onAuthStateChange(
-          (e, t) => zzSetSession(!!t),
+          (e, t) => {
+            (zzSetSession(!!t),
+              "PASSWORD_RECOVERY" === e && zzSetRecovery(!0));
+          },
         );
         return () => zzSub?.subscription?.unsubscribe();
       }, []),
@@ -18158,14 +18428,16 @@
                 }),
                 (0, o.jsx)("p", {
                   className: "text-sm font-medium",
-                  children: "Lade\u2026",
+                  children: "Lade…",
                 }),
               ],
             }),
           })
-        : zzSession
-          ? (0, o.jsx)(zzApp, {})
-          : (0, o.jsx)(zzLogin, {})
+        : zzRecovery
+          ? (0, o.jsx)(zzSetNewPassword, { onDone: () => zzSetRecovery(!1) })
+          : zzSession
+            ? (0, o.jsx)(zzApp, {})
+            : (0, o.jsx)(zzLogin, {})
     );
   }
   (0, s.createRoot)(document.getElementById("root")).render(
