@@ -13211,6 +13211,182 @@
     );
     return [n, a, l];
   }
+
+  // ============================================================================
+  // Rezepte -- eigene Tabelle statt gemeinsamer JSON-Block (Schritt 4, Arbeitsplan
+  // Abschnitt "Datenmodell aufteilen"). Jede Zeile in der Supabase-Tabelle
+  // "recipes" ist ein Rezept, Fotos liegen im Storage-Bucket "recipe-photos"
+  // statt als Base64 im Datensatz. zzRecipeRowToApp/zzRecipeAppToRow übersetzen
+  // zwischen Datenbank-Spaltennamen (snake_case) und der bisherigen App-Form
+  // (camelCase) -- dadurch bleibt Component A (Rezepte-Formular/-Liste) komplett
+  // unverändert, sie bekommt weiterhin genau dieselbe Rezept-Form wie vorher.
+  // Beim ersten Laden nach der Umstellung: falls die neue Tabelle noch leer ist,
+  // aber im alten JSON-Block ("app_data", id "recipes") noch Rezepte stehen,
+  // werden diese einmalig automatisch übernommen (inkl. Foto-Upload) und der
+  // alte Block danach geleert, damit das nicht bei jedem Laden erneut passiert.
+  // ============================================================================
+  function zzRecipeRowToApp(r) {
+    return {
+      id: r.id,
+      name: r.name,
+      category: r.category,
+      portions: r.portions,
+      prepTime: r.prep_time,
+      cookTime: r.cook_time,
+      notes: r.notes ?? "",
+      ingredients: r.ingredients || [],
+      steps: r.steps || [],
+      image: r.image_url || "",
+      createdAt: r.created_at,
+      updatedAt: r.updated_at,
+    };
+  }
+  function zzRecipeAppToRow(r) {
+    return {
+      id: r.id,
+      name: r.name,
+      category: r.category,
+      portions: r.portions,
+      prep_time: r.prepTime ?? null,
+      cook_time: r.cookTime ?? null,
+      notes: r.notes ?? "",
+      ingredients: r.ingredients || [],
+      steps: r.steps || [],
+      image_url: r.image && !r.image.startsWith("data:") ? r.image : null,
+      created_at: r.createdAt,
+      updated_at: r.updatedAt || new Date().toISOString(),
+    };
+  }
+  async function zzUploadRecipeImage(id, dataUrl) {
+    let zzRes = await fetch(dataUrl);
+    let zzBlob = await zzRes.blob();
+    let zzPath = id + ".jpg";
+    let { error: zzUpErr } = await window.supabaseClient.storage
+      .from("recipe-photos")
+      .upload(zzPath, zzBlob, { upsert: !0, contentType: "image/jpeg" });
+    if (zzUpErr) throw zzUpErr;
+    let { data: zzUrlData } = window.supabaseClient.storage
+      .from("recipe-photos")
+      .getPublicUrl(zzPath);
+    return zzUrlData.publicUrl + "?v=" + Date.now();
+  }
+  function uRecipes() {
+    let [zzItems, zzSetItems] = (0, i.useState)([]);
+    let [zzLd, zzSetLd] = (0, i.useState)(!1);
+    (0, i.useEffect)(() => {
+      if (!window.supabaseClient) {
+        zzSetLd(!0);
+        return;
+      }
+      (async () => {
+        try {
+          let { data: zzRows, error: zzSelErr } = await window.supabaseClient
+            .from("recipes")
+            .select("*")
+            .order("created_at", { ascending: !0 });
+          if (zzSelErr) throw zzSelErr;
+          let zzMapped = (zzRows || []).map(zzRecipeRowToApp);
+          if (0 === zzMapped.length) {
+            let { data: zzOld } = await window.supabaseClient
+              .from("app_data")
+              .select("value")
+              .eq("id", "recipes")
+              .single();
+            let zzOldRecipes = zzOld?.value;
+            if (Array.isArray(zzOldRecipes) && zzOldRecipes.length > 0) {
+              window.ee &&
+                ee.toast &&
+                ee.toast("Rezepte werden einmalig übernommen…", {
+                  icon: "⏳",
+                });
+              let zzMigrated = [];
+              for (let zzR of zzOldRecipes) {
+                let zzRec = { ...zzR };
+                try {
+                  if (zzRec.image && zzRec.image.startsWith("data:")) {
+                    zzRec.image = await zzUploadRecipeImage(
+                      zzRec.id,
+                      zzRec.image,
+                    );
+                  }
+                  let { error: zzInsErr } = await window.supabaseClient
+                    .from("recipes")
+                    .insert(zzRecipeAppToRow(zzRec));
+                  if (!zzInsErr) zzMigrated.push(zzRec);
+                } catch (zzMigE) {
+                  console.error(
+                    "Migration fehlgeschlagen für Rezept:",
+                    zzR.name,
+                    zzMigE,
+                  );
+                }
+              }
+              await window.supabaseClient.from("app_data").upsert({
+                id: "recipes",
+                value: [],
+                updated_at: new Date().toISOString(),
+              });
+              zzMapped = zzMigrated;
+              window.ee &&
+                ee.toast &&
+                ee.toast.success(`${zzMigrated.length} Rezepte übernommen`);
+            }
+          }
+          zzSetItems(zzMapped);
+        } catch (zzLoadErr) {
+          window.ee &&
+            ee.toast &&
+            ee.toast.error(
+              "Fehler beim Laden der Rezepte: " + zzLoadErr.message,
+            );
+        } finally {
+          zzSetLd(!0);
+        }
+      })();
+    }, []);
+    let zzSaveRecipe = (0, i.useCallback)((recipe) => {
+      zzSetItems((old) => {
+        let idx = old.findIndex((o) => o.id === recipe.id);
+        if (idx > -1) {
+          let copy = [...old];
+          return ((copy[idx] = recipe), copy);
+        }
+        return [...old, recipe];
+      });
+      if (!window.supabaseClient) return;
+      (async () => {
+        let zzToSave = { ...recipe };
+        try {
+          if (zzToSave.image && zzToSave.image.startsWith("data:")) {
+            zzToSave.image = await zzUploadRecipeImage(
+              zzToSave.id,
+              zzToSave.image,
+            );
+          }
+        } catch (zzUpE) {
+          ee.toast.error("Foto-Upload fehlgeschlagen: " + zzUpE.message);
+        }
+        let { error: zzSaveErr } = await window.supabaseClient
+          .from("recipes")
+          .upsert(zzRecipeAppToRow(zzToSave));
+        zzSaveErr &&
+          ee.toast.error("Fehler beim Cloud-Speichern: " + zzSaveErr.message);
+      })();
+    }, []);
+    let zzDeleteRecipe = (0, i.useCallback)((id) => {
+      zzSetItems((old) => old.filter((o) => o.id !== id));
+      if (!window.supabaseClient) return;
+      window.supabaseClient
+        .from("recipes")
+        .delete()
+        .eq("id", id)
+        .then(({ error }) => {
+          error &&
+            ee.toast.error("Fehler beim Löschen in der Cloud: " + error.message);
+        });
+    }, []);
+    return [zzItems, zzLd, zzSaveRecipe, zzDeleteRecipe];
+  }
   (!(function e() {
     if (
       "u" > typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ &&
@@ -16706,7 +16882,7 @@
   };
   let zzApp = function () {
     let [e, t] = (0, i.useState)("recipes"),
-      [n, r, zzRL] = u("recipes", []),
+      [n, zzRL, zzSaveRecipe, zzDeleteRecipe] = uRecipes(),
       [a, l, zzPL] = u("plan", {}),
       [s, c, zzSL] = u("shoppingItems", []),
       zzLoaded = zzRL && zzPL && zzSL,
@@ -16852,18 +17028,10 @@
               (0, o.jsx)(A, {
                 recipes: n,
                 onSave: (e) => {
-                  (r((t) => {
-                    let n = t.findIndex((t) => t.id === e.id);
-                    if (n > -1) {
-                      let r = [...t];
-                      return ((r[n] = e), r);
-                    }
-                    return [...t, e];
-                  }),
-                    ee.toast.success("Rezept gespeichert"));
+                  (zzSaveRecipe(e), ee.toast.success("Rezept gespeichert"));
                 },
                 onDelete: (e) => {
-                  (r((t) => t.filter((t) => t.id !== e)),
+                  (zzDeleteRecipe(e),
                     l((t) => {
                       let n = { ...t };
                       return (delete n[e], n);
