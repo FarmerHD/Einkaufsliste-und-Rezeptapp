@@ -13279,6 +13279,142 @@
       .getPublicUrl(zzPath);
     return zzUrlData.publicUrl + "?v=" + Date.now();
   }
+  // ============================================================================
+  // Schritt 6: Offline-Warteschlange + lokaler Zwischenspeicher (localStorage,
+  // kein Server nötig). Jede Änderung an recipes/shopping_items/plan_items wird
+  // wie bisher sofort im UI übernommen (optimistic update) und dann direkt zu
+  // Supabase geschickt. Schlägt das erkennbar wegen fehlender Internetverbindung
+  // fehl (nicht wegen eines echten Serverfehlers wie fehlender Berechtigung --
+  // das bleibt eine normale Fehlermeldung wie bisher), landet die Änderung
+  // stattdessen hier in der Warteschlange und wird automatisch nachgeholt,
+  // sobald die Verbindung zurück ist. Zusätzlich wird der zuletzt geladene Stand
+  // aller drei Tabellen lokal zwischengespeichert, damit die App auch ganz ohne
+  // Verbindung öffnet und den letzten bekannten Stand zeigt (nicht nur "Lade…").
+  // ============================================================================
+  const ZZ_QUEUE_KEY = "zzOfflineQueue";
+  const ZZ_CACHE_PREFIX = "zzOfflineCache_";
+  function zzQueueRead() {
+    try {
+      let zzParsed = JSON.parse(localStorage.getItem(ZZ_QUEUE_KEY) || "[]");
+      return Array.isArray(zzParsed) ? zzParsed : [];
+    } catch (e) {
+      return [];
+    }
+  }
+  function zzQueueWrite(zzQueue) {
+    try {
+      localStorage.setItem(ZZ_QUEUE_KEY, JSON.stringify(zzQueue));
+    } catch (e) {}
+    window.dispatchEvent(new CustomEvent("zzQueueChanged"));
+  }
+  function zzEnqueueOp(zzOp) {
+    let zzQueue = zzQueueRead();
+    (zzQueue.push({ ...zzOp, ts: new Date().toISOString() }),
+      zzQueueWrite(zzQueue));
+  }
+  function zzCacheRead(zzKey) {
+    try {
+      let zzRaw = localStorage.getItem(ZZ_CACHE_PREFIX + zzKey);
+      return zzRaw ? JSON.parse(zzRaw) : null;
+    } catch (e) {
+      return null;
+    }
+  }
+  function zzCacheWrite(zzKey, zzValue) {
+    try {
+      localStorage.setItem(ZZ_CACHE_PREFIX + zzKey, JSON.stringify(zzValue));
+    } catch (e) {}
+  }
+  function zzIsNetworkError(zzErr) {
+    if (!navigator.onLine) return !0;
+    let zzMsg = (zzErr && zzErr.message) || "";
+    return /fetch|network/i.test(zzMsg);
+  }
+  async function zzExecOp(zzOp) {
+    if ("upsert" === zzOp.type) {
+      let { error } = await window.supabaseClient
+        .from(zzOp.table)
+        .upsert(zzOp.rows);
+      return error || null;
+    }
+    if ("delete" === zzOp.type) {
+      let { error } = await window.supabaseClient
+        .from(zzOp.table)
+        .delete()
+        .in(zzOp.pk, zzOp.ids);
+      return error || null;
+    }
+    return null;
+  }
+  async function zzSendOrQueue(zzOp) {
+    if (!navigator.onLine) {
+      zzEnqueueOp(zzOp);
+      return { queued: !0 };
+    }
+    try {
+      let zzErr = await zzExecOp(zzOp);
+      return zzErr ? { error: zzErr } : { ok: !0 };
+    } catch (zzE) {
+      if (zzIsNetworkError(zzE)) {
+        zzEnqueueOp(zzOp);
+        return { queued: !0 };
+      }
+      return { error: zzE };
+    }
+  }
+  let zzFlushInProgress = !1;
+  async function zzFlushQueue() {
+    if (zzFlushInProgress || !window.supabaseClient || !navigator.onLine)
+      return;
+    let zzQueue = zzQueueRead();
+    if (!zzQueue.length) return;
+    zzFlushInProgress = !0;
+    let zzSynced = 0,
+      zzRemaining = [];
+    for (let zzOp of zzQueue) {
+      if (!navigator.onLine) {
+        zzRemaining.push(zzOp);
+        continue;
+      }
+      try {
+        let zzErr = await zzExecOp(zzOp);
+        zzErr ? zzRemaining.push(zzOp) : zzSynced++;
+      } catch (zzE) {
+        zzRemaining.push(zzOp);
+      }
+    }
+    (zzQueueWrite(zzRemaining), (zzFlushInProgress = !1));
+    zzSynced > 0 &&
+      window.ee &&
+      ee.toast &&
+      ee.toast.success(
+        `${zzSynced} Änderung${1 === zzSynced ? "" : "en"} nachgeholt, jetzt wieder synchron.`,
+      );
+  }
+  function zzUseOfflineStatus() {
+    let [zzOnline, zzSetOnline] = (0, i.useState)(navigator.onLine);
+    let [zzPending, zzSetPending] = (0, i.useState)(
+      () => zzQueueRead().length,
+    );
+    (0, i.useEffect)(() => {
+      let zzUpdatePending = () => zzSetPending(zzQueueRead().length);
+      let zzGoOnline = () => {
+        (zzSetOnline(!0), zzFlushQueue());
+      };
+      let zzGoOffline = () => zzSetOnline(!1);
+      (window.addEventListener("online", zzGoOnline),
+        window.addEventListener("offline", zzGoOffline),
+        window.addEventListener("zzQueueChanged", zzUpdatePending),
+        zzUpdatePending(),
+        navigator.onLine && zzFlushQueue());
+      return () => {
+        (window.removeEventListener("online", zzGoOnline),
+          window.removeEventListener("offline", zzGoOffline),
+          window.removeEventListener("zzQueueChanged", zzUpdatePending));
+      };
+    }, []);
+    return { online: zzOnline, pending: zzPending };
+  }
   function uRecipes() {
     let [zzItems, zzSetItems] = (0, i.useState)([]);
     let [zzLd, zzSetLd] = (0, i.useState)(!1);
@@ -13341,18 +13477,31 @@
                 ee.toast.success(`${zzMigrated.length} Rezepte übernommen`);
             }
           }
-          zzSetItems(zzMapped);
+          (zzSetItems(zzMapped), zzCacheWrite("recipes", zzMapped));
         } catch (zzLoadErr) {
-          window.ee &&
-            ee.toast &&
-            ee.toast.error(
-              "Fehler beim Laden der Rezepte: " + zzLoadErr.message,
-            );
+          let zzCached = zzCacheRead("recipes");
+          if (zzCached) {
+            (zzSetItems(zzCached),
+              window.ee &&
+                ee.toast &&
+                ee.toast("Offline — zeige zuletzt gespeicherten Stand.", {
+                  icon: "📴",
+                }));
+          } else {
+            window.ee &&
+              ee.toast &&
+              ee.toast.error(
+                "Fehler beim Laden der Rezepte: " + zzLoadErr.message,
+              );
+          }
         } finally {
           zzSetLd(!0);
         }
       })();
     }, []);
+    (0, i.useEffect)(() => {
+      zzLd && zzCacheWrite("recipes", zzItems);
+    }, [zzItems, zzLd]);
     let zzSaveRecipe = (0, i.useCallback)((recipe) => {
       zzSetItems((old) => {
         let idx = old.findIndex((o) => o.id === recipe.id);
@@ -13373,26 +13522,38 @@
             );
           }
         } catch (zzUpE) {
-          ee.toast.error("Foto-Upload fehlgeschlagen: " + zzUpE.message);
+          ee.toast.error(
+            zzIsNetworkError(zzUpE)
+              ? "Kein Internet — Foto wird beim nächsten Speichern mit Verbindung hochgeladen."
+              : "Foto-Upload fehlgeschlagen: " + zzUpE.message,
+          );
         }
-        let { error: zzSaveErr } = await window.supabaseClient
-          .from("recipes")
-          .upsert(zzRecipeAppToRow(zzToSave));
-        zzSaveErr &&
-          ee.toast.error("Fehler beim Cloud-Speichern: " + zzSaveErr.message);
+        let zzRes = await zzSendOrQueue({
+          table: "recipes",
+          type: "upsert",
+          rows: [zzRecipeAppToRow(zzToSave)],
+        });
+        zzRes.error &&
+          ee.toast.error(
+            "Fehler beim Cloud-Speichern: " + zzRes.error.message,
+          );
       })();
     }, []);
     let zzDeleteRecipe = (0, i.useCallback)((id) => {
       zzSetItems((old) => old.filter((o) => o.id !== id));
       if (!window.supabaseClient) return;
-      window.supabaseClient
-        .from("recipes")
-        .delete()
-        .eq("id", id)
-        .then(({ error }) => {
-          error &&
-            ee.toast.error("Fehler beim Löschen in der Cloud: " + error.message);
+      (async () => {
+        let zzRes = await zzSendOrQueue({
+          table: "recipes",
+          type: "delete",
+          pk: "id",
+          ids: [id],
         });
+        zzRes.error &&
+          ee.toast.error(
+            "Fehler beim Löschen in der Cloud: " + zzRes.error.message,
+          );
+      })();
     }, []);
     return [zzItems, zzLd, zzSaveRecipe, zzDeleteRecipe];
   }
@@ -13479,18 +13640,31 @@
               }
             }
           }
-          zzSetItemsRaw(zzMapped);
+          (zzSetItemsRaw(zzMapped), zzCacheWrite("shoppingItems", zzMapped));
         } catch (zzLoadErr) {
-          window.ee &&
-            ee.toast &&
-            ee.toast.error(
-              "Fehler beim Laden der Einkaufsliste: " + zzLoadErr.message,
-            );
+          let zzCached = zzCacheRead("shoppingItems");
+          if (zzCached) {
+            (zzSetItemsRaw(zzCached),
+              window.ee &&
+                ee.toast &&
+                ee.toast("Offline — zeige zuletzt gespeicherten Stand.", {
+                  icon: "📴",
+                }));
+          } else {
+            window.ee &&
+              ee.toast &&
+              ee.toast.error(
+                "Fehler beim Laden der Einkaufsliste: " + zzLoadErr.message,
+              );
+          }
         } finally {
           zzSetLd(!0);
         }
       })();
     }, []);
+    (0, i.useEffect)(() => {
+      zzLd && zzCacheWrite("shoppingItems", zzItems);
+    }, [zzItems, zzLd]);
     let zzSyncShopping = (0, i.useCallback)((zzOld, zzNext) => {
       if (!window.supabaseClient) return;
       let zzNextIds = new Set(zzNext.map((o) => o.id));
@@ -13503,33 +13677,36 @@
       });
       (async () => {
         if (zzToUpsert.length) {
-          let { error } = await window.supabaseClient
-            .from("shopping_items")
-            .upsert(
-              zzToUpsert.map((o) => ({
-                id: o.id,
-                name: o.name,
-                unit: o.unit,
-                amount: o.amount,
-                checked: !!o.checked,
-                from_recipes: o.fromRecipes || [],
-                updated_at: new Date().toISOString(),
-              })),
-            );
-          error &&
+          let zzRes = await zzSendOrQueue({
+            table: "shopping_items",
+            type: "upsert",
+            rows: zzToUpsert.map((o) => ({
+              id: o.id,
+              name: o.name,
+              unit: o.unit,
+              amount: o.amount,
+              checked: !!o.checked,
+              from_recipes: o.fromRecipes || [],
+              updated_at: new Date().toISOString(),
+            })),
+          });
+          zzRes.error &&
             ee.toast.error(
               "Fehler beim Cloud-Speichern der Einkaufsliste: " +
-                error.message,
+                zzRes.error.message,
             );
         }
         if (zzToDelete.length) {
-          let { error } = await window.supabaseClient
-            .from("shopping_items")
-            .delete()
-            .in("id", zzToDelete);
-          error &&
+          let zzRes = await zzSendOrQueue({
+            table: "shopping_items",
+            type: "delete",
+            pk: "id",
+            ids: zzToDelete,
+          });
+          zzRes.error &&
             ee.toast.error(
-              "Fehler beim Löschen in der Einkaufsliste: " + error.message,
+              "Fehler beim Löschen in der Einkaufsliste: " +
+                zzRes.error.message,
             );
         }
       })();
@@ -13614,18 +13791,31 @@
               }
             }
           }
-          zzSetPlanRaw(zzMapped);
+          (zzSetPlanRaw(zzMapped), zzCacheWrite("plan", zzMapped));
         } catch (zzLoadErr) {
-          window.ee &&
-            ee.toast &&
-            ee.toast.error(
-              "Fehler beim Laden des Wochenplans: " + zzLoadErr.message,
-            );
+          let zzCached = zzCacheRead("plan");
+          if (zzCached) {
+            (zzSetPlanRaw(zzCached),
+              window.ee &&
+                ee.toast &&
+                ee.toast("Offline — zeige zuletzt gespeicherten Stand.", {
+                  icon: "📴",
+                }));
+          } else {
+            window.ee &&
+              ee.toast &&
+              ee.toast.error(
+                "Fehler beim Laden des Wochenplans: " + zzLoadErr.message,
+              );
+          }
         } finally {
           zzSetLd(!0);
         }
       })();
     }, []);
+    (0, i.useEffect)(() => {
+      zzLd && zzCacheWrite("plan", zzPlan);
+    }, [zzPlan, zzLd]);
     let zzSyncPlan = (0, i.useCallback)((zzOld, zzNext) => {
       if (!window.supabaseClient) return;
       let zzOldKeys = Object.keys(zzOld);
@@ -13638,27 +13828,32 @@
       });
       (async () => {
         if (zzToUpsert.length) {
-          let { error } = await window.supabaseClient.from("plan_items").upsert(
-            zzToUpsert.map((k) => ({
+          let zzRes = await zzSendOrQueue({
+            table: "plan_items",
+            type: "upsert",
+            rows: zzToUpsert.map((k) => ({
               recipe_id: k,
               selected: !!zzNext[k].selected,
               portions: zzNext[k].portions,
               updated_at: new Date().toISOString(),
             })),
-          );
-          error &&
+          });
+          zzRes.error &&
             ee.toast.error(
-              "Fehler beim Cloud-Speichern des Wochenplans: " + error.message,
+              "Fehler beim Cloud-Speichern des Wochenplans: " +
+                zzRes.error.message,
             );
         }
         if (zzToDelete.length) {
-          let { error } = await window.supabaseClient
-            .from("plan_items")
-            .delete()
-            .in("recipe_id", zzToDelete);
-          error &&
+          let zzRes = await zzSendOrQueue({
+            table: "plan_items",
+            type: "delete",
+            pk: "recipe_id",
+            ids: zzToDelete,
+          });
+          zzRes.error &&
             ee.toast.error(
-              "Fehler beim Löschen im Wochenplan: " + error.message,
+              "Fehler beim Löschen im Wochenplan: " + zzRes.error.message,
             );
         }
       })();
@@ -17507,6 +17702,7 @@
       [a, l, zzPL] = uPlan(),
       [s, c, zzSL] = uShoppingItems(),
       zzLoaded = zzRL && zzPL && zzSL,
+      zzOfflineStatus = zzUseOfflineStatus(),
       d = (0, i.useRef)(null),
       f = s.filter((e) => !e.checked).length,
       p = [
@@ -17585,6 +17781,15 @@
               (0, o.jsxs)("div", {
                 className: "flex items-center gap-2",
                 children: [
+                  (!zzOfflineStatus.online || zzOfflineStatus.pending > 0) &&
+                    (0, o.jsx)("span", {
+                      className: `inline-flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-full ${zzOfflineStatus.online ? "bg-amber-50 text-amber-700 border border-amber-200" : "bg-stone-100 text-stone-500 border border-stone-200"}`,
+                      children: zzOfflineStatus.online
+                        ? `${zzOfflineStatus.pending} wird synchronisiert…`
+                        : zzOfflineStatus.pending > 0
+                          ? `Offline · ${zzOfflineStatus.pending} ausstehend`
+                          : "Offline",
+                    }),
                   (0, o.jsx)("a", {
                     href: "impressum.html",
                     className:
