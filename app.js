@@ -13387,6 +13387,285 @@
     }, []);
     return [zzItems, zzLd, zzSaveRecipe, zzDeleteRecipe];
   }
+
+  // ============================================================================
+  // Einkaufsliste & Wochenplan -- ebenfalls eigene Tabellen statt JSON-Block
+  // (Erweiterung von Schritt 4 auf shoppingItems und plan, siehe Arbeitsplan
+  // Abschnitt 2b). Grund: bei der Einkaufsliste ist gleichzeitige Nutzung durch
+  // beide Haushaltsmitglieder (beide im Supermarkt, beide haken gleichzeitig ab)
+  // der wahrscheinlichste Kollisionsfall überhaupt -- mit einem einzigen Block
+  // konnte ein Häkchen das andere unbemerkt überschreiben (K3). Jetzt hat jeder
+  // Artikel bzw. jeder geplante Rezepteintrag seine eigene Zeile.
+  //
+  // Beide Hooks geben absichtlich dieselbe Form zurück wie die alte u()-Funktion
+  // ([wert, setter, geladen]) -- dadurch bleiben alle bisherigen Aufrufstellen in
+  // zzApp (onToggle, onGenerate, onPortions, onClearDone, onAddExtra, ...)
+  // unverändert, nur die Quelle dahinter wechselt von einem Blob zu Zeilen. Der
+  // Setter vergleicht bei jedem Aufruf selbst alten und neuen Stand und schickt
+  // nur die tatsächlich geänderten/neuen/gelöschten Zeilen an Supabase.
+  // ============================================================================
+  function uShoppingItems() {
+    let [zzItems, zzSetItemsRaw] = (0, i.useState)([]);
+    let [zzLd, zzSetLd] = (0, i.useState)(!1);
+    (0, i.useEffect)(() => {
+      if (!window.supabaseClient) {
+        zzSetLd(!0);
+        return;
+      }
+      (async () => {
+        try {
+          let { data: zzRows, error: zzSelErr } = await window.supabaseClient
+            .from("shopping_items")
+            .select("*")
+            .order("created_at", { ascending: !0 });
+          if (zzSelErr) throw zzSelErr;
+          let zzMapped = (zzRows || []).map((r) => ({
+            id: r.id,
+            name: r.name,
+            unit: r.unit,
+            amount: r.amount,
+            checked: r.checked,
+            fromRecipes: r.from_recipes || [],
+          }));
+          if (0 === zzMapped.length) {
+            let { data: zzOld } = await window.supabaseClient
+              .from("app_data")
+              .select("value")
+              .eq("id", "shoppingItems")
+              .single();
+            let zzOldItems = zzOld?.value;
+            if (Array.isArray(zzOldItems) && zzOldItems.length > 0) {
+              let zzRowsToInsert = zzOldItems.map((it) => ({
+                id: crypto.randomUUID(),
+                name: it.name,
+                unit: it.unit,
+                amount: it.amount,
+                checked: !!it.checked,
+                from_recipes: it.fromRecipes || [],
+              }));
+              let { error: zzInsErr } = await window.supabaseClient
+                .from("shopping_items")
+                .insert(zzRowsToInsert);
+              if (!zzInsErr) {
+                await window.supabaseClient.from("app_data").upsert({
+                  id: "shoppingItems",
+                  value: [],
+                  updated_at: new Date().toISOString(),
+                });
+                zzMapped = zzRowsToInsert.map((r) => ({
+                  id: r.id,
+                  name: r.name,
+                  unit: r.unit,
+                  amount: r.amount,
+                  checked: r.checked,
+                  fromRecipes: r.from_recipes,
+                }));
+              } else {
+                window.ee &&
+                  ee.toast &&
+                  ee.toast.error(
+                    "Fehler bei der Übernahme der Einkaufsliste: " +
+                      zzInsErr.message,
+                  );
+              }
+            }
+          }
+          zzSetItemsRaw(zzMapped);
+        } catch (zzLoadErr) {
+          window.ee &&
+            ee.toast &&
+            ee.toast.error(
+              "Fehler beim Laden der Einkaufsliste: " + zzLoadErr.message,
+            );
+        } finally {
+          zzSetLd(!0);
+        }
+      })();
+    }, []);
+    let zzSyncShopping = (0, i.useCallback)((zzOld, zzNext) => {
+      if (!window.supabaseClient) return;
+      let zzNextIds = new Set(zzNext.map((o) => o.id));
+      let zzToDelete = zzOld
+        .filter((o) => o.id && !zzNextIds.has(o.id))
+        .map((o) => o.id);
+      let zzToUpsert = zzNext.filter((o) => {
+        let zzPrev = zzOld.find((p) => p.id === o.id);
+        return !zzPrev || JSON.stringify(zzPrev) !== JSON.stringify(o);
+      });
+      (async () => {
+        if (zzToUpsert.length) {
+          let { error } = await window.supabaseClient
+            .from("shopping_items")
+            .upsert(
+              zzToUpsert.map((o) => ({
+                id: o.id,
+                name: o.name,
+                unit: o.unit,
+                amount: o.amount,
+                checked: !!o.checked,
+                from_recipes: o.fromRecipes || [],
+                updated_at: new Date().toISOString(),
+              })),
+            );
+          error &&
+            ee.toast.error(
+              "Fehler beim Cloud-Speichern der Einkaufsliste: " +
+                error.message,
+            );
+        }
+        if (zzToDelete.length) {
+          let { error } = await window.supabaseClient
+            .from("shopping_items")
+            .delete()
+            .in("id", zzToDelete);
+          error &&
+            ee.toast.error(
+              "Fehler beim Löschen in der Einkaufsliste: " + error.message,
+            );
+        }
+      })();
+    }, []);
+    let zzSetItems = (0, i.useCallback)(
+      (update) => {
+        zzSetItemsRaw((old) => {
+          let next = "function" == typeof update ? update(old) : update;
+          next = next.map((it) =>
+            it.id ? it : { ...it, id: crypto.randomUUID() },
+          );
+          zzSyncShopping(old, next);
+          return next;
+        });
+      },
+      [zzSyncShopping],
+    );
+    return [zzItems, zzSetItems, zzLd];
+  }
+  function uPlan() {
+    let [zzPlan, zzSetPlanRaw] = (0, i.useState)({});
+    let [zzLd, zzSetLd] = (0, i.useState)(!1);
+    (0, i.useEffect)(() => {
+      if (!window.supabaseClient) {
+        zzSetLd(!0);
+        return;
+      }
+      (async () => {
+        try {
+          let { data: zzRows, error: zzSelErr } = await window.supabaseClient
+            .from("plan_items")
+            .select("*");
+          if (zzSelErr) throw zzSelErr;
+          let zzMapped = {};
+          (zzRows || []).forEach((r) => {
+            zzMapped[r.recipe_id] = {
+              recipeId: r.recipe_id,
+              selected: r.selected,
+              portions: r.portions,
+            };
+          });
+          if (0 === Object.keys(zzMapped).length) {
+            let { data: zzOld } = await window.supabaseClient
+              .from("app_data")
+              .select("value")
+              .eq("id", "plan")
+              .single();
+            let zzOldPlan = zzOld?.value;
+            if (
+              zzOldPlan &&
+              "object" == typeof zzOldPlan &&
+              Object.keys(zzOldPlan).length > 0
+            ) {
+              let zzRowsToInsert = Object.keys(zzOldPlan).map((zzId) => ({
+                recipe_id: zzId,
+                selected: !!zzOldPlan[zzId]?.selected,
+                portions: zzOldPlan[zzId]?.portions ?? 4,
+              }));
+              let { error: zzInsErr } = await window.supabaseClient
+                .from("plan_items")
+                .insert(zzRowsToInsert);
+              if (!zzInsErr) {
+                await window.supabaseClient.from("app_data").upsert({
+                  id: "plan",
+                  value: {},
+                  updated_at: new Date().toISOString(),
+                });
+                zzRowsToInsert.forEach((r) => {
+                  zzMapped[r.recipe_id] = {
+                    recipeId: r.recipe_id,
+                    selected: r.selected,
+                    portions: r.portions,
+                  };
+                });
+              } else {
+                window.ee &&
+                  ee.toast &&
+                  ee.toast.error(
+                    "Fehler bei der Übernahme des Wochenplans: " +
+                      zzInsErr.message,
+                  );
+              }
+            }
+          }
+          zzSetPlanRaw(zzMapped);
+        } catch (zzLoadErr) {
+          window.ee &&
+            ee.toast &&
+            ee.toast.error(
+              "Fehler beim Laden des Wochenplans: " + zzLoadErr.message,
+            );
+        } finally {
+          zzSetLd(!0);
+        }
+      })();
+    }, []);
+    let zzSyncPlan = (0, i.useCallback)((zzOld, zzNext) => {
+      if (!window.supabaseClient) return;
+      let zzOldKeys = Object.keys(zzOld);
+      let zzNextKeys = Object.keys(zzNext);
+      let zzToDelete = zzOldKeys.filter((k) => !zzNextKeys.includes(k));
+      let zzToUpsert = zzNextKeys.filter((k) => {
+        let p = zzOld[k],
+          n = zzNext[k];
+        return !p || p.selected !== n.selected || p.portions !== n.portions;
+      });
+      (async () => {
+        if (zzToUpsert.length) {
+          let { error } = await window.supabaseClient.from("plan_items").upsert(
+            zzToUpsert.map((k) => ({
+              recipe_id: k,
+              selected: !!zzNext[k].selected,
+              portions: zzNext[k].portions,
+              updated_at: new Date().toISOString(),
+            })),
+          );
+          error &&
+            ee.toast.error(
+              "Fehler beim Cloud-Speichern des Wochenplans: " + error.message,
+            );
+        }
+        if (zzToDelete.length) {
+          let { error } = await window.supabaseClient
+            .from("plan_items")
+            .delete()
+            .in("recipe_id", zzToDelete);
+          error &&
+            ee.toast.error(
+              "Fehler beim Löschen im Wochenplan: " + error.message,
+            );
+        }
+      })();
+    }, []);
+    let zzSetPlan = (0, i.useCallback)(
+      (update) => {
+        zzSetPlanRaw((old) => {
+          let next = "function" == typeof update ? update(old) : update;
+          zzSyncPlan(old, next);
+          return next;
+        });
+      },
+      [zzSyncPlan],
+    );
+    return [zzPlan, zzSetPlan, zzLd];
+  }
   (!(function e() {
     if (
       "u" > typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ &&
@@ -16883,8 +17162,8 @@
   let zzApp = function () {
     let [e, t] = (0, i.useState)("recipes"),
       [n, zzRL, zzSaveRecipe, zzDeleteRecipe] = uRecipes(),
-      [a, l, zzPL] = u("plan", {}),
-      [s, c, zzSL] = u("shoppingItems", []),
+      [a, l, zzPL] = uPlan(),
+      [s, c, zzSL] = uShoppingItems(),
       zzLoaded = zzRL && zzPL && zzSL,
       d = (0, i.useRef)(null),
       f = s.filter((e) => !e.checked).length,
