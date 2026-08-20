@@ -3187,3 +3187,44 @@ body {
     min-width: 100%;
   }
 }
+
+/* ----------------------------------------------------------------------
+   Mobile-Nachbesserung (Team-Review "Mobile Nutzung"): auf schmalen
+   Bildschirmen hatten alle Formularfelder 14px Schrift. Safari auf dem
+   iPhone loest beim Fokussieren eines Feldes automatisch einen Zoom aus,
+   sobald dessen Schrift kleiner als 16px ist -- die ganze Seite springt
+   dann ruckartig groesser und muss von Hand wieder zurueckgezoomt werden.
+   Betrifft nur Formularfelder unterhalb 640px (Tailwind "sm"), Desktop/
+   Tablet bleiben unveraendert bei 14px. Reines handgeschriebenes CSS,
+   keine neue Tailwind-Klasse -- unabhaengig vom Vorkompilieren oben.
+   !important ist hier bewusst noetig: Tailwind-Klassen wie .text-sm sind
+   Klassen-Selektoren (Spezifitaet 0,1,0) und schlagen einen einfachen
+   Element-Selektor wie "input" (Spezifitaet 0,0,1) unabhaengig von der
+   Reihenfolge im Stylesheet -- ohne !important wuerde diese Regel also
+   still gar nichts bewirken.
+   ---------------------------------------------------------------------- */
+@media (max-width: 639px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* ----------------------------------------------------------------------
+   Mobile-Nachbesserung: die "Extra hinzufügen"-Zeile (Name-Feld + Menge +
+   Einheit + Plus-Button nebeneinander) ist auf schmalen Screens zu eng --
+   das Namensfeld schrumpft so weit, dass selbst die Platzhalter-Beispiele
+   mitten im Wort abgeschnitten werden (sichtbar geworden durch die 16px-
+   Schriftgroesse oben, die pro Zeichen mehr Platz braucht als vorher).
+   Eigene Klassennamen (zz-extra-*) statt Tailwind-Utilities, damit hier
+   nichts vom Vorkompilieren oben abhaengt.
+   ---------------------------------------------------------------------- */
+@media (max-width: 479px) {
+  .zz-extra-row {
+    flex-wrap: wrap;
+  }
+  .zz-extra-name {
+    flex-basis: 100%;
+  }
+}

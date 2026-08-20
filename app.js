@@ -14364,6 +14364,14 @@
       h = (0, i.useRef)(null),
       [zzImportOpen, zzSetImportOpen] = (0, i.useState)(!1),
       [zzImportText, zzSetImportText] = (0, i.useState)(""),
+      // Schritt: Mobile Ansicht -- auf schmalen Bildschirmen (kein Platz fuer
+      // die Formular-Spalte neben der Liste, siehe grid-cols-1 unten) ist das
+      // "Neues Rezept"-Formular standardmaessig eingeklappt, damit man beim
+      // Oeffnen des Rezepte-Tabs zuerst die eigene Rezeptliste sieht statt
+      // erst am ganzen Formular vorbeischeiden zu muessen. zzIsDesktop folgt
+      // demselben Umbruchpunkt (1024px, "lg" bei Tailwind) wie der Grid unten.
+      [zzMobileFormOpen, zzSetMobileFormOpen] = (0, i.useState)(!1),
+      [zzIsDesktop, zzSetIsDesktop] = (0, i.useState)(!0),
       [O, D] = (0, i.useState)(R()),
       F = (e, t) => D((n) => ({ ...n, [e]: t })),
       I = (0, i.useCallback)(() => {
@@ -14371,7 +14379,8 @@
           a(null),
           m("basics"),
           zzSetImportOpen(!1),
-          zzSetImportText(""));
+          zzSetImportText(""),
+          zzSetMobileFormOpen(!1));
       }, [a]),
       $ = (0, i.useCallback)(
         (e, t, n) =>
@@ -14404,10 +14413,28 @@
         },
         { id: "notes", label: "Notizen", icon: (0, o.jsx)(b, { size: 13 }) },
       ];
+    ((0, i.useEffect)(() => {
+      if ("undefined" == typeof window || !window.matchMedia) return;
+      let zzMq = window.matchMedia("(min-width: 1024px)");
+      zzSetIsDesktop(zzMq.matches);
+      let zzHandler = (e) => zzSetIsDesktop(e.matches);
+      return (
+        zzMq.addEventListener
+          ? zzMq.addEventListener("change", zzHandler)
+          : zzMq.addListener(zzHandler),
+        () =>
+          zzMq.removeEventListener
+            ? zzMq.removeEventListener("change", zzHandler)
+            : zzMq.removeListener(zzHandler)
+      );
+    }, []),
+      1);
+    let zzShowForm = zzIsDesktop || zzMobileFormOpen || !!r;
     return (0, o.jsxs)("div", {
       className:
         "grid grid-cols-1 lg:grid-cols-[420px_1fr] gap-4 lg:gap-8 items-start",
       children: [
+        zzShowForm &&
         (0, o.jsx)("div", {
           className: "lg:sticky top-24",
           children: (0, o.jsxs)("div", {
@@ -14628,7 +14655,7 @@
                           children: [
                             (0, o.jsx)("label", {
                               className:
-                                "block text-xs font-semibold uppercase tracking-widest text-stone-400",
+                                "block text-xs font-semibold uppercase tracking-widest text-stone-400 break-words",
                               children: "Rezeptname",
                             }),
                             (0, o.jsx)("input", {
@@ -14647,7 +14674,7 @@
                               children: [
                                 (0, o.jsx)("label", {
                                   className:
-                                    "block text-xs font-semibold uppercase tracking-widest text-stone-400",
+                                    "block text-xs font-semibold uppercase tracking-widest text-stone-400 break-words",
                                   children: "Portionen",
                                 }),
                                 (0, o.jsxs)("div", {
@@ -14663,7 +14690,7 @@
                                           Math.max(1, O.portions - 1),
                                         ),
                                       className:
-                                        "px-2.5 sm:px-3 py-2.5 text-stone-400 hover:text-stone-700 hover:bg-stone-100 transition-colors",
+                                        "px-2.5 sm:px-3 py-3 text-stone-400 hover:text-stone-700 hover:bg-stone-100 transition-colors",
                                       children: (0, o.jsx)(k, { size: 14 }),
                                     }),
                                     (0, o.jsx)("input", {
@@ -14688,7 +14715,7 @@
                                           Math.min(99, O.portions + 1),
                                         ),
                                       className:
-                                        "px-2.5 sm:px-3 py-2.5 text-stone-400 hover:text-stone-700 hover:bg-stone-100 transition-colors",
+                                        "px-2.5 sm:px-3 py-3 text-stone-400 hover:text-stone-700 hover:bg-stone-100 transition-colors",
                                       children: (0, o.jsx)(w, { size: 14 }),
                                     }),
                                   ],
@@ -14700,7 +14727,7 @@
                               children: [
                                 (0, o.jsx)("label", {
                                   className:
-                                    "block text-xs font-semibold uppercase tracking-widest text-stone-400",
+                                    "block text-xs font-semibold uppercase tracking-widest text-stone-400 break-words",
                                   children: "Kategorie",
                                 }),
                                 (0, o.jsx)("select", {
@@ -14724,7 +14751,7 @@
                               children: [
                                 (0, o.jsx)("label", {
                                   className:
-                                    "block text-xs font-semibold uppercase tracking-widest text-stone-400",
+                                    "block text-xs font-semibold uppercase tracking-widest text-stone-400 break-words",
                                   children: "Vorbereitungszeit",
                                 }),
                                 (0, o.jsxs)("div", {
@@ -14761,7 +14788,7 @@
                               children: [
                                 (0, o.jsx)("label", {
                                   className:
-                                    "block text-xs font-semibold uppercase tracking-widest text-stone-400",
+                                    "block text-xs font-semibold uppercase tracking-widest text-stone-400 break-words",
                                   children: "Kochzeit",
                                 }),
                                 (0, o.jsxs)("div", {
@@ -14800,7 +14827,7 @@
                           children: [
                             (0, o.jsx)("label", {
                               className:
-                                "block text-xs font-semibold uppercase tracking-widest text-stone-400",
+                                "block text-xs font-semibold uppercase tracking-widest text-stone-400 break-words",
                               children: "Zutaten",
                             }),
                             (0, o.jsx)("div", {
@@ -14811,11 +14838,11 @@
                                   "div",
                                   {
                                     className:
-                                      "flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-2",
+                                      "flex items-center gap-1.5 sm:gap-2",
                                     children: [
                                       (0, o.jsxs)("div", {
                                         className:
-                                          "flex items-center gap-1.5 sm:gap-2 sm:flex-1 sm:min-w-0",
+                                          "flex items-center gap-1.5 sm:gap-2 flex-1 min-w-0",
                                         children: [
                                           (0, o.jsxs)("span", {
                                             className:
@@ -14834,7 +14861,7 @@
                                       }),
                                       (0, o.jsxs)("div", {
                                         className:
-                                          "flex items-center gap-1.5 sm:gap-2 pl-6 sm:pl-0",
+                                          "flex items-center gap-1.5 sm:gap-2 flex-shrink-0",
                                         children: [
                                           (0, o.jsxs)("div", {
                                             className:
@@ -14893,7 +14920,7 @@
                                               ),
                                             "aria-label": "Zutat entfernen",
                                             className:
-                                              "w-8 h-8 flex items-center justify-center rounded-xl text-stone-300 hover:text-red-400 hover:bg-red-50 transition-colors flex-shrink-0",
+                                              "w-10 h-10 flex items-center justify-center rounded-xl text-stone-300 hover:text-red-400 hover:bg-red-50 transition-colors flex-shrink-0",
                                             children: (0, o.jsx)(S, {
                                               size: 14,
                                             }),
@@ -14990,7 +15017,7 @@
                       children: [
                         (0, o.jsx)("label", {
                           className:
-                            "block text-xs font-semibold uppercase tracking-widest text-stone-400",
+                            "block text-xs font-semibold uppercase tracking-widest text-stone-400 break-words",
                           children: "Notizen & Tipps",
                         }),
                         (0, o.jsx)("textarea", {
@@ -15008,12 +15035,12 @@
               (0, o.jsxs)("div", {
                 className: "px-4 sm:px-6 pb-5 sm:pb-6 flex gap-2 sm:gap-3",
                 children: [
-                  r &&
+                  (r || zzMobileFormOpen) &&
                     (0, o.jsx)("button", {
                       onClick: I,
                       className:
                         "px-5 py-2.5 rounded-xl border border-stone-200 text-sm font-medium text-stone-600 hover:bg-stone-50 transition-colors",
-                      children: "Abbrechen",
+                      children: r ? "Abbrechen" : "Schließen",
                     }),
                   (0, o.jsx)("button", {
                     onClick: () => {
@@ -15085,6 +15112,17 @@
         }),
         (0, o.jsxs)("div", {
           children: [
+            !zzShowForm &&
+              (0, o.jsxs)("button", {
+                onClick: () => {
+                  (zzSetMobileFormOpen(!0),
+                    window.scrollTo &&
+                      window.scrollTo({ top: 0, behavior: "smooth" }));
+                },
+                className:
+                  "w-full mb-6 flex items-center justify-center gap-2 py-3 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-sm font-semibold transition-colors",
+                children: [(0, o.jsx)(w, { size: 16 }), "Neues Rezept"],
+              }),
             (0, o.jsxs)("div", {
               className: "flex items-center gap-3 mb-6",
               children: [
@@ -15140,7 +15178,7 @@
                       children:
                         u || "Alle" !== d
                           ? "Andere Filter probieren."
-                          : "Füge dein erstes Rezept links hinzu.",
+                          : "Füge dein erstes Rezept hinzu.",
                     }),
                   ],
                 })
@@ -15517,6 +15555,7 @@
     onToggle: n,
     onPortions: r,
     onGenerate: a,
+    onGoToRecipes: zzGoToRecipes,
   }) {
     let l = e.filter((e) => t[e.id]?.selected),
       i = l.reduce((e, n) => e + (t[n.id]?.portions ?? n.portions), 0);
@@ -15654,7 +15693,7 @@
                                         r(e.id, Math.max(1, a.portions - 1)),
                                       "aria-label": "Portionen verringern",
                                       className:
-                                        "px-3 py-2 text-stone-400 hover:text-stone-700 hover:bg-stone-100 transition-colors",
+                                        "px-3 py-3 text-stone-400 hover:text-stone-700 hover:bg-stone-100 transition-colors",
                                       children: (0, o.jsx)(k, { size: 13 }),
                                     }),
                                     (0, o.jsxs)("div", {
@@ -15677,7 +15716,7 @@
                                         r(e.id, Math.min(99, a.portions + 1)),
                                       "aria-label": "Portionen erhöhen",
                                       className:
-                                        "px-3 py-2 text-stone-400 hover:text-stone-700 hover:bg-stone-100 transition-colors",
+                                        "px-3 py-3 text-stone-400 hover:text-stone-700 hover:bg-stone-100 transition-colors",
                                       children: (0, o.jsx)(w, { size: 13 }),
                                     }),
                                   ],
@@ -15813,6 +15852,13 @@
               className: "text-sm mt-1",
               children: 'Erstelle zuerst Rezepte im "Rezepte"-Tab.',
             }),
+            zzGoToRecipes &&
+              (0, o.jsx)("button", {
+                onClick: zzGoToRecipes,
+                className:
+                  "mt-4 px-4 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-sm font-semibold transition-colors",
+                children: "Zu den Rezepten",
+              }),
           ],
         });
   }
@@ -16397,7 +16443,7 @@
           children: "Extra hinzufügen",
         }),
         (0, o.jsxs)("div", {
-          className: "flex gap-2 items-center",
+          className: "flex gap-2 items-center zz-extra-row",
           children: [
             (0, o.jsx)("input", {
               ref: i,
@@ -16406,7 +16452,7 @@
               onKeyDown: u,
               placeholder: "z.B. Zahnpasta, Waschmittel…",
               className:
-                "flex-1 min-w-0 px-4 py-2.5 rounded-xl border border-stone-200 bg-stone-50 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all placeholder:text-stone-300",
+                "flex-1 min-w-0 px-4 py-2.5 rounded-xl border border-stone-200 bg-stone-50 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all placeholder:text-stone-300 zz-extra-name",
             }),
             (0, o.jsxs)("div", {
               className:
@@ -17761,7 +17807,7 @@
                     "button",
                     {
                       onClick: () => t(n),
-                      className: `relative flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all ${e === n ? "bg-emerald-50 text-emerald-800" : "text-stone-500 hover:text-stone-800 hover:bg-stone-100"}`,
+                      className: `relative flex items-center gap-1.5 px-3 py-3 rounded-lg text-sm font-medium transition-all ${e === n ? "bg-emerald-50 text-emerald-800" : "text-stone-500 hover:text-stone-800 hover:bg-stone-100"}`,
                       children: [
                         (0, o.jsx)(a, { size: 16 }),
                         r,
@@ -17869,6 +17915,7 @@
               (0, o.jsx)(I, {
                 recipes: n,
                 plan: a,
+                onGoToRecipes: () => t("recipes"),
                 onToggle: (e, t) => {
                   l((r) => ({
                     ...r,
