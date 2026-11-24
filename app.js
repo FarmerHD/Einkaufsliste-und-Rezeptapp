@@ -14101,16 +14101,16 @@
       "Sonstiges",
     ],
     _ = {
-      Frühstück: "bg-amber-100 text-amber-800 border-amber-200",
-      Mittagessen: "bg-orange-100 text-orange-800 border-orange-200",
-      Abendessen: "bg-indigo-100 text-indigo-800 border-indigo-200",
-      Snack: "bg-teal-100 text-teal-800 border-teal-200",
-      Dessert: "bg-pink-100 text-pink-800 border-pink-200",
-      Backen: "bg-yellow-100 text-yellow-800 border-yellow-200",
-      Sonstiges: "bg-stone-100 text-stone-600 border-stone-200",
+      Frühstück: "zz-badge",
+      Mittagessen: "zz-badge",
+      Abendessen: "zz-badge",
+      Snack: "zz-badge",
+      Dessert: "zz-badge",
+      Backen: "zz-badge",
+      Sonstiges: "zz-badge",
     },
     L =
-      "w-full px-4 py-2.5 rounded-xl border border-stone-200 bg-stone-50 text-stone-800 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all placeholder:text-stone-300",
+      "w-full px-4 py-2.5 rounded-xl border border-stone-200 bg-stone-50 text-stone-800 text-sm focus:outline-none focus:ring-2 focus:ring-zz-neutral-500 focus:border-transparent transition-all placeholder:text-stone-300",
     M = () => ({ id: crypto.randomUUID(), name: "", amount: 0, unit: "g" }),
     R = () => ({
       name: "",
@@ -14459,7 +14459,7 @@
                       type: "button",
                       onClick: () => zzSetImportOpen((v) => !v),
                       className:
-                        "mt-2 text-xs font-semibold text-emerald-700 hover:text-emerald-900 transition-colors",
+                        "mt-2 text-xs font-semibold text-zz-neutral-700 hover:text-zz-neutral-900 transition-colors",
                       children: zzImportOpen
                         ? "Rezept einfügen schließen"
                         : "Rezept einfügen statt abtippen →",
@@ -14474,7 +14474,7 @@
                     "button",
                     {
                       onClick: () => m(e.id),
-                      className: `flex-1 flex items-center justify-center gap-1.5 py-3 text-xs font-semibold transition-colors border-b-2 -mb-px ${p === e.id ? "border-emerald-600 text-emerald-700" : "border-transparent text-stone-400 hover:text-stone-600"}`,
+                      className: `flex-1 flex items-center justify-center gap-1.5 py-3 text-xs font-semibold transition-colors border-b-2 -mb-px ${p === e.id ? "border-zz-neutral-600 text-zz-neutral-700" : "border-transparent text-stone-400 hover:text-stone-600"}`,
                       children: [e.icon, e.label],
                     },
                     e.id,
@@ -14500,7 +14500,7 @@
                             "Spaghetti Bolognese\nFür 4 Portionen\n\nZutaten\n500 g Hackfleisch\n2 Zwiebeln\n400 g Tomaten\n\nZubereitung\n1. Zwiebeln anbraten\n2. Hackfleisch dazugeben und anbraten\n3. Tomaten dazugeben und köcheln lassen",
                           rows: 12,
                           className:
-                            "w-full px-4 py-3 rounded-xl border border-stone-200 bg-stone-50 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all placeholder:text-stone-300 resize-none",
+                            "w-full px-4 py-3 rounded-xl border border-stone-200 bg-stone-50 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-zz-neutral-500 focus:border-transparent transition-all placeholder:text-stone-300 resize-none",
                         }),
                         (0, o.jsxs)("div", {
                           className: "flex gap-2",
@@ -14558,7 +14558,7 @@
                                   m("basics"));
                               },
                               className:
-                                "flex-1 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-semibold transition-colors",
+                                "flex-1 py-2.5 rounded-xl zz-cta bg-zz-neutral-700 hover:bg-zz-neutral-800 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-semibold transition-colors",
                               children: "Erkennen & übernehmen",
                             }),
                           ],
@@ -14598,7 +14598,7 @@
                               : (0, o.jsxs)("button", {
                                   onClick: () => h.current?.click(),
                                   className:
-                                    "w-full h-24 rounded-xl border-2 border-dashed border-stone-200 flex flex-col items-center justify-center gap-1.5 text-stone-400 hover:border-emerald-400 hover:text-emerald-600 hover:bg-emerald-50/40 transition-all",
+                                    "w-full h-24 rounded-xl border-2 border-dashed border-stone-200 flex flex-col items-center justify-center gap-1.5 text-stone-400 hover:border-zz-neutral-400 hover:text-zz-neutral-600 hover:bg-zz-neutral-50/40 transition-all",
                                   children: [
                                     (0, o.jsx)(x, { size: 20 }),
                                     (0, o.jsx)("span", {
@@ -14679,7 +14679,7 @@
                                 }),
                                 (0, o.jsxs)("div", {
                                   className:
-                                    "flex items-center rounded-xl border border-stone-200 bg-stone-50 overflow-hidden focus-within:ring-2 focus-within:ring-emerald-500 transition-all",
+                                    "flex items-center rounded-xl border border-stone-200 bg-stone-50 overflow-hidden focus-within:ring-2 focus-within:ring-zz-neutral-500 transition-all",
                                   children: [
                                     (0, o.jsx)("button", {
                                       type: "button",
@@ -14756,7 +14756,7 @@
                                 }),
                                 (0, o.jsxs)("div", {
                                   className:
-                                    "flex items-center rounded-xl border border-stone-200 bg-stone-50 overflow-hidden focus-within:ring-2 focus-within:ring-emerald-500 transition-all",
+                                    "flex items-center rounded-xl border border-stone-200 bg-stone-50 overflow-hidden focus-within:ring-2 focus-within:ring-zz-neutral-500 transition-all",
                                   children: [
                                     (0, o.jsx)("input", {
                                       type: "number",
@@ -14793,7 +14793,7 @@
                                 }),
                                 (0, o.jsxs)("div", {
                                   className:
-                                    "flex items-center rounded-xl border border-stone-200 bg-stone-50 overflow-hidden focus-within:ring-2 focus-within:ring-emerald-500 transition-all",
+                                    "flex items-center rounded-xl border border-stone-200 bg-stone-50 overflow-hidden focus-within:ring-2 focus-within:ring-zz-neutral-500 transition-all",
                                   children: [
                                     (0, o.jsx)("input", {
                                       type: "number",
@@ -14855,7 +14855,7 @@
                                             onChange: (t) =>
                                               $(e.id, "name", t.target.value),
                                             className:
-                                              "flex-1 min-w-0 px-3 py-2.5 rounded-xl border border-stone-200 bg-stone-50 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all placeholder:text-stone-300",
+                                              "flex-1 min-w-0 px-3 py-2.5 rounded-xl border border-stone-200 bg-stone-50 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-zz-neutral-500 focus:border-transparent transition-all placeholder:text-stone-300",
                                           }),
                                         ],
                                       }),
@@ -14865,7 +14865,7 @@
                                         children: [
                                           (0, o.jsxs)("div", {
                                             className:
-                                              "flex items-center w-fit rounded-xl border border-stone-200 bg-stone-50 overflow-hidden focus-within:ring-2 focus-within:ring-emerald-500 transition-all flex-shrink-0",
+                                              "flex items-center w-fit rounded-xl border border-stone-200 bg-stone-50 overflow-hidden focus-within:ring-2 focus-within:ring-zz-neutral-500 transition-all flex-shrink-0",
                                             children: [
                                               (0, o.jsx)("input", {
                                                 type: "number",
@@ -14884,7 +14884,7 @@
                                                   );
                                                 },
                                                 className:
-                                                  "w-9 px-1.5 py-2 text-sm text-stone-800 bg-transparent focus:outline-none text-right tabular-nums placeholder:text-stone-300 no-spinner",
+                                                  "w-14 px-1.5 py-2 text-sm text-stone-800 bg-transparent focus:outline-none text-right tabular-nums placeholder:text-stone-300 no-spinner",
                                               }),
                                               (0, o.jsx)("div", {
                                                 className:
@@ -14937,7 +14937,7 @@
                               onClick: () =>
                                 F("ingredients", [...O.ingredients, M()]),
                               className:
-                                "flex items-center gap-1.5 text-sm text-emerald-700 hover:text-emerald-900 font-medium transition-colors mt-1",
+                                "flex items-center gap-1.5 text-sm text-zz-neutral-700 hover:text-zz-neutral-900 font-medium transition-colors mt-1",
                               children: [
                                 (0, o.jsx)(w, { size: 15 }),
                                 " Zutat hinzufügen",
@@ -14964,7 +14964,7 @@
                               children: [
                                 (0, o.jsx)("div", {
                                   className:
-                                    "w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold flex items-center justify-center flex-shrink-0 mt-2.5",
+                                    "w-6 h-6 rounded-full bg-zz-neutral-100 text-zz-neutral-700 text-xs font-bold flex items-center justify-center flex-shrink-0 mt-2.5",
                                   children: t + 1,
                                 }),
                                 (0, o.jsx)("textarea", {
@@ -14981,7 +14981,7 @@
                                   placeholder: `Schritt ${t + 1}\u{2026}`,
                                   rows: 2,
                                   className:
-                                    "flex-1 px-3 py-2.5 rounded-xl border border-stone-200 bg-stone-50 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all placeholder:text-stone-300 resize-none",
+                                    "flex-1 px-3 py-2.5 rounded-xl border border-stone-200 bg-stone-50 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-zz-neutral-500 focus:border-transparent transition-all placeholder:text-stone-300 resize-none",
                                 }),
                                 (0, o.jsx)("button", {
                                   onClick: () =>
@@ -15002,7 +15002,7 @@
                         (0, o.jsxs)("button", {
                           onClick: () => F("steps", [...O.steps, ""]),
                           className:
-                            "flex items-center gap-1.5 text-sm text-emerald-700 hover:text-emerald-900 font-medium transition-colors",
+                            "flex items-center gap-1.5 text-sm text-zz-neutral-700 hover:text-zz-neutral-900 font-medium transition-colors",
                           children: [
                             (0, o.jsx)(w, { size: 15 }),
                             " Schritt hinzufügen",
@@ -15026,7 +15026,7 @@
                           placeholder: "z.B. Variationen, Tipps, Lagerung…",
                           rows: 8,
                           className:
-                            "w-full px-4 py-3 rounded-xl border border-stone-200 bg-stone-50 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all placeholder:text-stone-300 resize-none",
+                            "w-full px-4 py-3 rounded-xl border border-stone-200 bg-stone-50 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-zz-neutral-500 focus:border-transparent transition-all placeholder:text-stone-300 resize-none",
                         }),
                       ],
                     }),
@@ -15102,7 +15102,7 @@
                       !O.name.trim() ||
                       !O.ingredients.some((e) => e.name.trim()),
                     className:
-                      "flex-1 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-semibold transition-colors",
+                      "flex-1 py-2.5 rounded-xl zz-cta bg-zz-neutral-700 hover:bg-zz-neutral-800 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-semibold transition-colors",
                     children: r ? "Änderungen speichern" : "Rezept speichern",
                   }),
                 ],
@@ -15120,7 +15120,7 @@
                       window.scrollTo({ top: 0, behavior: "smooth" }));
                 },
                 className:
-                  "w-full mb-6 flex items-center justify-center gap-2 py-3 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-sm font-semibold transition-colors",
+                  "w-full mb-6 flex items-center justify-center gap-2 py-3 rounded-xl zz-cta bg-zz-neutral-700 hover:bg-zz-neutral-800 text-white text-sm font-semibold transition-colors",
                 children: [(0, o.jsx)(w, { size: 16 }), "Neues Rezept"],
               }),
             (0, o.jsxs)("div", {
@@ -15139,7 +15139,7 @@
                       onChange: (e) => c(e.target.value),
                       placeholder: "Rezepte durchsuchen…",
                       className:
-                        "w-full pl-10 pr-4 py-2.5 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all placeholder:text-stone-300",
+                        "w-full pl-10 pr-4 py-2.5 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-zz-neutral-500 focus:border-transparent transition-all placeholder:text-stone-300",
                     }),
                   ],
                 }),
@@ -15147,7 +15147,7 @@
                   value: d,
                   onChange: (e) => f(e.target.value),
                   className:
-                    "px-4 py-2.5 rounded-xl border border-stone-200 bg-white text-sm text-stone-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all",
+                    "px-4 py-2.5 rounded-xl border border-stone-200 bg-white text-sm text-stone-700 focus:outline-none focus:ring-2 focus:ring-zz-neutral-500 focus:border-transparent transition-all",
                   children: [
                     (0, o.jsx)("option", {
                       value: "Alle",
@@ -15163,8 +15163,25 @@
                   className: "text-center py-28 text-stone-400",
                   children: [
                     (0, o.jsx)("div", {
-                      className: "text-5xl mb-4",
-                      children: "🥘",
+                      className: "mb-4 flex justify-center",
+                      children: (0, o.jsxs)("svg", {
+                        xmlns: "http://www.w3.org/2000/svg",
+                        width: 44,
+                        height: 44,
+                        viewBox: "0 0 24 24",
+                        fill: "none",
+                        stroke: "currentColor",
+                        strokeWidth: 1.5,
+                        strokeLinecap: "round",
+                        strokeLinejoin: "round",
+                        "aria-hidden": "true",
+                        children: [
+                          (0, o.jsx)("path", { d: "M4 19.5V4a1 1 0 0 1 1-1h5v6a4 4 0 0 1-4 4H4" }),
+                          (0, o.jsx)("path", { d: "M4 19.5h16" }),
+                          (0, o.jsx)("path", { d: "M13 3v16.5" }),
+                          (0, o.jsx)("path", { d: "M13 3h6a1 1 0 0 1 1 1v15.5" }),
+                        ],
+                      }),
                     }),
                     (0, o.jsx)("p", {
                       className: "text-base font-medium text-stone-500",
@@ -15292,7 +15309,7 @@
                                         onClick: () => s(e),
                                         "aria-label": "Rezept ansehen",
                                         className:
-                                          "p-2 rounded-xl text-stone-400 hover:text-emerald-700 hover:bg-emerald-50 transition-colors",
+                                          "p-2 rounded-xl text-stone-400 hover:text-zz-neutral-700 hover:bg-zz-neutral-50 transition-colors",
                                         children: (0, o.jsx)(y, { size: 15 }),
                                       }),
                                       (0, o.jsx)("button", {
@@ -15319,7 +15336,7 @@
                                             }));
                                         },
                                         className:
-                                          "p-2 rounded-xl text-stone-400 hover:text-emerald-700 hover:bg-emerald-50 transition-colors",
+                                          "p-2 rounded-xl text-stone-400 hover:text-zz-neutral-700 hover:bg-zz-neutral-50 transition-colors",
                                         children: (0, o.jsx)(z, { size: 15 }),
                                       }),
                                       (0, o.jsx)("button", {
@@ -15485,7 +15502,7 @@
                                     children: [
                                       (0, o.jsx)("div", {
                                         className:
-                                          "w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5",
+                                          "w-6 h-6 rounded-full bg-zz-neutral-100 text-zz-neutral-700 text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5",
                                         children: t + 1,
                                       }),
                                       (0, o.jsx)("p", {
@@ -15541,13 +15558,13 @@
       ["path", { d: "M12 8h.01", key: "e9boi3" }],
     ]),
     F = {
-      Frühstück: "bg-amber-100 text-amber-800",
-      Mittagessen: "bg-orange-100 text-orange-800",
-      Abendessen: "bg-indigo-100 text-indigo-800",
-      Snack: "bg-teal-100 text-teal-800",
-      Dessert: "bg-pink-100 text-pink-800",
-      Backen: "bg-yellow-100 text-yellow-800",
-      Sonstiges: "bg-stone-100 text-stone-600",
+      Frühstück: "zz-badge",
+      Mittagessen: "zz-badge",
+      Abendessen: "zz-badge",
+      Snack: "zz-badge",
+      Dessert: "zz-badge",
+      Backen: "zz-badge",
+      Sonstiges: "zz-badge",
     };
   function I({
     recipes: e,
@@ -15557,13 +15574,35 @@
     onGenerate: a,
     onGoToRecipes: zzGoToRecipes,
   }) {
+    let [zzQ, zzSetQ] = (0, i.useState)("");
     let l = e.filter((e) => t[e.id]?.selected),
-      i = l.reduce((e, n) => e + (t[n.id]?.portions ?? n.portions), 0);
+      zzQn = zzQ.trim().toLowerCase(),
+      zzList = zzQn
+        ? e.filter((r) => r.name.toLowerCase().includes(zzQn))
+        : e,
+      zzSum = l.reduce((e, n) => e + (t[n.id]?.portions ?? n.portions), 0);
     return e.length
       ? (0, o.jsxs)("div", {
           className:
-            "grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-4 lg:gap-8 items-start",
+            "grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-4 lg:gap-8 items-start zz-has-mobile-cta",
           children: [
+            l.length > 0 &&
+              (0, o.jsx)("div", {
+                className: "zz-mobile-cta",
+                children: (0, o.jsxs)("button", {
+                  type: "button",
+                  onClick: a,
+                  className: "zz-cta",
+                  children: [
+                    (0, o.jsx)(O, { size: 16 }),
+                    "Einkaufsliste erstellen",
+                    (0, o.jsx)("span", {
+                      className: "zz-mobile-cta-count",
+                      children: l.length,
+                    }),
+                  ],
+                }),
+              }),
             (0, o.jsxs)("div", {
               children: [
                 (0, o.jsxs)("div", {
@@ -15576,31 +15615,50 @@
                     (0, o.jsx)("p", {
                       className: "text-stone-500 text-sm mt-1",
                       children:
-                        "Wähle Rezepte aus und passe die Portionsmenge an.",
+                        "Angehakte Rezepte landen automatisch auf dem nächsten freien Tag. Portionen mit − und + anpassen.",
                     }),
+                    e.length > 6 &&
+                      (0, o.jsxs)("label", {
+                        className: "zz-search",
+                        children: [
+                          (0, o.jsx)(N, { size: 16, "aria-hidden": "true" }),
+                          (0, o.jsx)("input", {
+                            type: "search",
+                            value: zzQ,
+                            onChange: (ev) => zzSetQ(ev.target.value),
+                            placeholder: "Rezept suchen…",
+                            "aria-label": "Rezept suchen",
+                          }),
+                        ],
+                      }),
                   ],
                 }),
+                zzList.length === 0 &&
+                  (0, o.jsx)("p", {
+                    className: "text-sm text-stone-400 py-6 text-center",
+                    children: "Kein Rezept passt zur Suche.",
+                  }),
                 (0, o.jsx)("div", {
                   className: "space-y-2.5",
-                  children: e.map((e) => {
+                  children: zzList.map((e) => {
                     let a = t[e.id] ?? {
                         recipeId: e.id,
                         selected: !1,
                         portions: e.portions,
                       },
                       l = F[e.category] ?? F.Sonstiges,
-                      i = (e.prepTime ?? 0) + (e.cookTime ?? 0);
+                      zzMin = (e.prepTime ?? 0) + (e.cookTime ?? 0);
                     return (0, o.jsx)(
                       "div",
                       {
-                        className: `bg-white rounded-2xl border shadow-sm transition-all overflow-hidden ${a.selected ? "border-emerald-300 ring-1 ring-emerald-100" : "border-stone-200 hover:border-stone-300"}`,
+                        className: `bg-white rounded-2xl border shadow-sm transition-all overflow-hidden ${a.selected ? "border-zz-neutral-300 ring-1 ring-zz-neutral-100" : "border-stone-200 hover:border-stone-300"}`,
                         children: (0, o.jsxs)("div", {
                           className: "flex items-center gap-4",
                           children: [
                             e.image &&
                               (0, o.jsx)("div", {
                                 className:
-                                  "w-20 h-16 flex-shrink-0 overflow-hidden",
+                                  "w-20 h-16 flex-shrink-0 overflow-hidden zz-thumb-fixed",
                                 children: (0, o.jsx)("img", {
                                   src: e.image,
                                   alt: e.name,
@@ -15613,7 +15671,10 @@
                               children: [
                                 (0, o.jsx)("button", {
                                   onClick: () => n(e.id, !a.selected),
-                                  className: `w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${a.selected ? "bg-emerald-600 border-emerald-600" : "border-stone-300 bg-white hover:border-emerald-400"}`,
+                                  role: "checkbox",
+                                  "aria-checked": !!a.selected,
+                                  "aria-label": `${e.name} für die Woche auswählen`,
+                                  className: `w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${a.selected ? "bg-zz-neutral-600 border-zz-neutral-600" : "border-stone-300 bg-white hover:border-zz-neutral-400"}`,
                                   children:
                                     a.selected &&
                                     (0, o.jsx)("svg", {
@@ -15662,13 +15723,13 @@
                                               : " Zutaten",
                                           ],
                                         }),
-                                        i > 0 &&
+                                        zzMin > 0 &&
                                           (0, o.jsxs)("span", {
                                             className:
                                               "flex items-center gap-1",
                                             children: [
                                               (0, o.jsx)(C, { size: 10 }),
-                                              i,
+                                              zzMin,
                                               " min",
                                             ],
                                           }),
@@ -15701,12 +15762,12 @@
                                         "px-2 text-center min-w-[52px]",
                                       children: [
                                         (0, o.jsx)("div", {
-                                          className: `text-sm font-bold tabular-nums ${a.selected ? "text-emerald-700" : "text-stone-400"}`,
+                                          className: `zz-monumental-num ${a.selected ? "text-zz-neutral-700" : "text-stone-400"}`,
                                           children: a.portions,
                                         }),
                                         (0, o.jsx)("div", {
                                           className:
-                                            "text-[10px] text-stone-400 leading-none",
+                                            "text-[10px] text-stone-400 leading-none uppercase tracking-wide",
                                           children: "Port.",
                                         }),
                                       ],
@@ -15748,8 +15809,24 @@
                           className: "text-center py-6 text-stone-400",
                           children: [
                             (0, o.jsx)("div", {
-                              className: "text-3xl mb-2",
-                              children: "🛒",
+                              className: "mb-2 flex justify-center",
+                              children: (0, o.jsxs)("svg", {
+                                xmlns: "http://www.w3.org/2000/svg",
+                                width: 30,
+                                height: 30,
+                                viewBox: "0 0 24 24",
+                                fill: "none",
+                                stroke: "currentColor",
+                                strokeWidth: 1.5,
+                                strokeLinecap: "round",
+                                strokeLinejoin: "round",
+                                "aria-hidden": "true",
+                                children: [
+                                  (0, o.jsx)("path", { d: "M3 4h2l2.2 11.4a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6L20 8H6" }),
+                                  (0, o.jsx)("circle", { cx: 9, cy: 20, r: 1.4 }),
+                                  (0, o.jsx)("circle", { cx: 17, cy: 20, r: 1.4 }),
+                                ],
+                              }),
                             }),
                             (0, o.jsx)("p", {
                               className: "text-sm",
@@ -15773,15 +15850,15 @@
                                     }),
                                     (0, o.jsxs)("span", {
                                       className:
-                                        "text-emerald-700 font-semibold flex-shrink-0 tabular-nums",
+                                        "text-zz-neutral-700 font-semibold flex-shrink-0 tabular-nums",
                                       children: [t[e.id].portions, "×"],
                                     }),
                                     (0, o.jsx)("button", {
                                       onClick: () => n(e.id, !1),
-                                      "aria-label": "Aus Wochenplan entfernen",
+                                      "aria-label": `${e.name} aus Wochenplan entfernen`,
                                       className:
-                                        "text-stone-300 hover:text-red-400 transition-colors flex-shrink-0",
-                                      children: (0, o.jsx)(S, { size: 12 }),
+                                        "zz-icon-btn zz-icon-btn-sm hover:text-red-400 flex-shrink-0",
+                                      children: (0, o.jsx)(v, { size: 14 }),
                                     }),
                                   ],
                                 },
@@ -15798,7 +15875,7 @@
                                 }),
                                 (0, o.jsxs)("span", {
                                   className: "text-stone-700",
-                                  children: [i, " Portionen"],
+                                  children: [zzSum, " Portionen"],
                                 }),
                               ],
                             }),
@@ -15808,7 +15885,7 @@
                       onClick: a,
                       disabled: 0 === l.length,
                       className:
-                        "w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-emerald-700 hover:bg-emerald-800 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-colors",
+                        "w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl zz-cta bg-zz-neutral-700 hover:bg-zz-neutral-800 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-colors",
                       children: [
                         (0, o.jsx)(O, { size: 16 }),
                         "Einkaufsliste erstellen",
@@ -15824,7 +15901,7 @@
                 }),
                 (0, o.jsxs)("div", {
                   className:
-                    "flex gap-2 p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-800",
+                    "flex gap-2 p-4 bg-zz-neutral-50 border border-zz-neutral-200 rounded-xl text-xs text-zz-neutral-800",
                   children: [
                     (0, o.jsx)(D, {
                       size: 14,
@@ -15843,7 +15920,27 @@
       : (0, o.jsxs)("div", {
           className: "text-center py-32 text-stone-400",
           children: [
-            (0, o.jsx)("div", { className: "text-5xl mb-4", children: "📖" }),
+            (0, o.jsx)("div", {
+              className: "mb-4 flex justify-center",
+              children: (0, o.jsxs)("svg", {
+                xmlns: "http://www.w3.org/2000/svg",
+                width: 44,
+                height: 44,
+                viewBox: "0 0 24 24",
+                fill: "none",
+                stroke: "currentColor",
+                strokeWidth: 1.5,
+                strokeLinecap: "round",
+                strokeLinejoin: "round",
+                "aria-hidden": "true",
+                children: [
+                  (0, o.jsx)("rect", { x: 3, y: 5, width: 18, height: 16, rx: 2 }),
+                  (0, o.jsx)("path", { d: "M3 10h18" }),
+                  (0, o.jsx)("path", { d: "M8 3v4" }),
+                  (0, o.jsx)("path", { d: "M16 3v4" }),
+                ],
+              }),
+            }),
             (0, o.jsx)("p", {
               className: "text-base font-medium text-stone-500",
               children: "Noch keine Rezepte vorhanden",
@@ -15856,7 +15953,7 @@
               (0, o.jsx)("button", {
                 onClick: zzGoToRecipes,
                 className:
-                  "mt-4 px-4 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-sm font-semibold transition-colors",
+                  "mt-4 px-4 py-2.5 rounded-xl zz-cta bg-zz-neutral-700 hover:bg-zz-neutral-800 text-white text-sm font-semibold transition-colors",
                 children: "Zu den Rezepten",
               }),
           ],
@@ -15881,21 +15978,139 @@
         { x: "6", y: "14", width: "12", height: "8", rx: "1", key: "1ue0tg" },
       ],
     ]),
+    zzIconMeat = (p) =>
+      (0, o.jsxs)("svg", {
+        xmlns: "http://www.w3.org/2000/svg",
+        width: p.size || 14,
+        height: p.size || 14,
+        viewBox: "0 0 24 24",
+        fill: "none",
+        stroke: "currentColor",
+        strokeWidth: 2,
+        strokeLinecap: "round",
+        strokeLinejoin: "round",
+        className: p.className,
+        "aria-hidden": "true",
+        children: [
+          (0, o.jsx)("rect", { x: 3.5, y: 6.5, width: 17, height: 11, rx: 3 }),
+          (0, o.jsx)("path", { d: "M8.5 9l1.8 6" }),
+          (0, o.jsx)("path", { d: "M13.7 9l1.8 6" }),
+        ],
+      }),
+    zzIconMilk = (p) =>
+      (0, o.jsxs)("svg", {
+        xmlns: "http://www.w3.org/2000/svg",
+        width: p.size || 14,
+        height: p.size || 14,
+        viewBox: "0 0 24 24",
+        fill: "none",
+        stroke: "currentColor",
+        strokeWidth: 2,
+        strokeLinecap: "round",
+        strokeLinejoin: "round",
+        className: p.className,
+        "aria-hidden": "true",
+        children: [
+          (0, o.jsx)("path", {
+            d: "M9 3h6l1 3.5V20a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2V6.5z",
+          }),
+          (0, o.jsx)("path", { d: "M8 10h8" }),
+        ],
+      }),
+    zzIconVeg = (p) =>
+      (0, o.jsxs)("svg", {
+        xmlns: "http://www.w3.org/2000/svg",
+        width: p.size || 14,
+        height: p.size || 14,
+        viewBox: "0 0 24 24",
+        fill: "none",
+        stroke: "currentColor",
+        strokeWidth: 2,
+        strokeLinecap: "round",
+        strokeLinejoin: "round",
+        className: p.className,
+        "aria-hidden": "true",
+        children: [
+          (0, o.jsx)("path", {
+            d: "M12 21c-5-1.6-8-5.6-8-10.4A7.6 3.6 0 0 1 12 3a7.6 3.6 0 0 1 8 7.6C20 15.4 17 19.4 12 21z",
+          }),
+          (0, o.jsx)("path", { d: "M12 5v16" }),
+        ],
+      }),
+    zzIconSpice = (p) =>
+      (0, o.jsxs)("svg", {
+        xmlns: "http://www.w3.org/2000/svg",
+        width: p.size || 14,
+        height: p.size || 14,
+        viewBox: "0 0 24 24",
+        fill: "none",
+        stroke: "currentColor",
+        strokeWidth: 2,
+        strokeLinecap: "round",
+        strokeLinejoin: "round",
+        className: p.className,
+        "aria-hidden": "true",
+        children: (0, o.jsx)("path", {
+          d: "M12 2.5c3.6 5.3 6.5 9 6.5 12.3a6.5 6.5 0 0 1-13 0c0-3.3 2.9-7 6.5-12.3z",
+        }),
+      }),
+    zzIconGrain = (p) =>
+      (0, o.jsxs)("svg", {
+        xmlns: "http://www.w3.org/2000/svg",
+        width: p.size || 14,
+        height: p.size || 14,
+        viewBox: "0 0 24 24",
+        fill: "none",
+        stroke: "currentColor",
+        strokeWidth: 2,
+        strokeLinecap: "round",
+        strokeLinejoin: "round",
+        className: p.className,
+        "aria-hidden": "true",
+        children: [
+          (0, o.jsx)("path", { d: "M8 9l1-4h6l1 4" }),
+          (0, o.jsx)("path", {
+            d: "M6.5 9h11l-1.2 10a2 2 0 0 1-2 1.8h-4.6a2 2 0 0 1-2-1.8z",
+          }),
+        ],
+      }),
+    zzIconCan = (p) =>
+      (0, o.jsxs)("svg", {
+        xmlns: "http://www.w3.org/2000/svg",
+        width: p.size || 14,
+        height: p.size || 14,
+        viewBox: "0 0 24 24",
+        fill: "none",
+        stroke: "currentColor",
+        strokeWidth: 2,
+        strokeLinecap: "round",
+        strokeLinejoin: "round",
+        className: p.className,
+        "aria-hidden": "true",
+        children: [
+          (0, o.jsx)("rect", { x: 5, y: 7, width: 14, height: 13, rx: 1 }),
+          (0, o.jsx)("ellipse", { cx: 12, cy: 7, rx: 7, ry: 2 }),
+          (0, o.jsx)("path", { d: "M5 12h14" }),
+        ],
+      }),
     B = [
       {
-        label: "🥩 Fleisch & Fisch",
+        label: "Fleisch & Fisch",
+        Icon: zzIconMeat,
         matchName: (e) =>
           /hähnchen|rind|schwein|hack|wurst|schinken|lachs|thunfisch|fleisch|fisch/i.test(
             e.name,
           ),
       },
       {
-        label: "🥛 Milchprodukte",
+        label: "Milchprodukte",
+        Icon: zzIconMilk,
         matchName: (e) =>
           /milch|käse|joghurt|sahne|butter|quark|\bei\b|\beier\b/i.test(e.name),
       },
       {
-        label: "🥕 Gemüse & Obst",
+        label: "Gemüse & Obst",
+        Icon: zzIconVeg,
         matchName: (e) =>
           /zwiebel|knoblauch|karotte|paprika|tomate|salat|gurke|apfel|banane|zitrone|kartoffel|brokkoli|spinat/i.test(
             e.name,
@@ -15903,7 +16118,8 @@
         matchUnit: (e) => ["Zehe", "Bund"].includes(e.unit),
       },
       {
-        label: "🧂 Gewürze & Öle",
+        label: "Gewürze & Öle",
+        Icon: zzIconSpice,
         matchName: (e) =>
           /salz|pfeffer|öl|essig|zucker|gewürz|oregano|basilikum|zimt|paprikapulver|kurkuma/i.test(
             e.name,
@@ -15911,19 +16127,21 @@
         matchUnit: (e) => ["EL", "TL", "Prise"].includes(e.unit),
       },
       {
-        label: "🍝 Trockenware",
+        label: "Trockenware",
+        Icon: zzIconGrain,
         matchName: (e) =>
           /pasta|nudel|reis|mehl|linse|bohne|erbse|couscous|haferflocken/i.test(
             e.name,
           ),
       },
       {
-        label: "🥫 Konserven",
+        label: "Konserven",
+        Icon: zzIconCan,
         matchName: (e) => /dose|konserv/i.test(e.name),
         matchUnit: (e) => "Dose" === e.unit,
       },
-      { label: "📝 Extras", matchName: (e) => 0 === e.fromRecipes.length },
-      { label: "🛒 Sonstiges", catchAll: !0 },
+      { label: "Extras", matchName: (e) => 0 === e.fromRecipes.length },
+      { label: "Sonstiges", catchAll: !0 },
     ],
     H = (e) => {
       if (!e) return "";
@@ -16004,7 +16222,7 @@
           zzKey = (e) =>
             e.name.toLowerCase().trim() + "||" + e.unit.toLowerCase().trim(),
           zzMain = B.filter((t) => !t.catchAll),
-          zzGroups = zzMain.map((t) => ({ label: t.label, items: [] }));
+          zzGroups = zzMain.map((t) => ({ label: t.label, Icon: t.Icon, items: [] }));
         (zzMain.forEach((t, zzI) => {
           e.filter(
             (zzE) => !l.has(zzKey(zzE)) && t.matchName && t.matchName(zzE),
@@ -16125,14 +16343,16 @@
                   "div",
                   {
                     children: [
-                      (0, o.jsx)("h3", {
-                        className:
-                          "text-[11px] font-bold uppercase tracking-widest text-stone-400 mb-2 px-1",
-                        children: e.label,
+                      (0, o.jsxs)("h3", {
+                        className: "zz-panel-band",
+                        children: [
+                          e.Icon && (0, o.jsx)(e.Icon, { size: 16 }),
+                          e.label,
+                        ],
                       }),
                       (0, o.jsx)("div", {
                         className:
-                          "bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden",
+                          "bg-white rounded-b-2xl border border-t-0 border-stone-200 shadow-sm overflow-hidden",
                         children: e.items.map((n, r) => {
                           let l = 0 === n.fromRecipes.length,
                             zzK = n.name + "||" + n.unit,
@@ -16141,7 +16361,7 @@
                             ? (0, o.jsxs)(
                                 "div",
                                 {
-                                  className: `px-4 py-3 bg-emerald-50 ${r !== e.items.length - 1 ? "border-b border-stone-100" : ""}`,
+                                  className: `px-4 py-3 bg-zz-neutral-50 ${r !== e.items.length - 1 ? "border-b border-stone-100" : ""}`,
                                   children: [
                                     (0, o.jsx)("input", {
                                       value: zzName,
@@ -16155,7 +16375,7 @@
                                       },
                                       placeholder: "Artikelname",
                                       className:
-                                        "w-full px-3 py-2 mb-2 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-emerald-500",
+                                        "w-full px-3 py-2 mb-2 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-zz-neutral-500",
                                     }),
                                     (0, o.jsxs)("div", {
                                       className:
@@ -16175,14 +16395,14 @@
                                                 zzSetEdit(null));
                                           },
                                           className:
-                                            "w-16 px-2 py-2 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 text-right tabular-nums focus:outline-none focus:ring-2 focus:ring-emerald-500 no-spinner",
+                                            "w-20 px-2 py-2 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 text-right tabular-nums focus:outline-none focus:ring-2 focus:ring-zz-neutral-500 no-spinner",
                                         }),
                                         (0, o.jsx)("select", {
                                           value: zzUnit,
                                           onChange: (e) =>
                                             zzSetUnit(e.target.value),
                                           className:
-                                            "px-2 py-2 rounded-xl border border-stone-200 bg-white text-sm text-stone-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer",
+                                            "px-2 py-2 rounded-xl border border-stone-200 bg-white text-sm text-stone-600 focus:outline-none focus:ring-2 focus:ring-zz-neutral-500 cursor-pointer",
                                           children: V.map((e) =>
                                             (0, o.jsx)(
                                               "option",
@@ -16203,7 +16423,7 @@
                                         (0, o.jsx)("button", {
                                           onClick: () => zzSave(n),
                                           className:
-                                            "px-3 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-sm font-semibold transition-colors",
+                                            "px-3 py-2 rounded-xl zz-cta bg-zz-neutral-700 hover:bg-zz-neutral-800 text-white text-sm font-semibold transition-colors",
                                           children: "Speichern",
                                         }),
                                       ],
@@ -16219,7 +16439,7 @@
                                   children: [
                                     (0, o.jsx)("div", {
                                       onClick: () => t(n.name, n.unit),
-                                      className: `w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all cursor-pointer ${n.checked ? "bg-emerald-600 border-emerald-600" : "border-stone-300 hover:border-emerald-400"}`,
+                                      className: `w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all cursor-pointer ${n.checked ? "bg-zz-neutral-600 border-zz-neutral-600" : "border-stone-300 hover:border-zz-neutral-400"}`,
                                       children:
                                         n.checked &&
                                         (0, o.jsx)("svg", {
@@ -16256,13 +16476,13 @@
                                         l &&
                                           (0, o.jsx)("p", {
                                             className:
-                                              "text-xs text-emerald-600 mt-0.5",
+                                              "text-xs text-zz-neutral-600 mt-0.5",
                                             children: "Manuell hinzugefügt",
                                           }),
                                       ],
                                     }),
                                     (0, o.jsx)("span", {
-                                      className: `text-sm font-semibold tabular-nums flex-shrink-0 ${n.checked ? "text-stone-300" : "text-emerald-700"}`,
+                                      className: `zz-monumental-num-sm flex-shrink-0 ${n.checked ? "text-stone-300" : "text-zz-neutral-700"}`,
                                       children: Hde(n.amount)
                                         ? `${Hde(n.amount)} ${n.unit}`
                                         : "Stück" !== n.unit
@@ -16273,7 +16493,7 @@
                                       onClick: () => zzStart(n),
                                       "aria-label": "Artikel bearbeiten",
                                       className:
-                                        "w-7 h-7 flex items-center justify-center rounded-lg text-stone-300 hover:text-emerald-600 hover:bg-emerald-50 sm:opacity-0 sm:group-hover:opacity-100 transition-all flex-shrink-0",
+                                        "w-7 h-7 flex items-center justify-center rounded-lg text-stone-300 hover:text-zz-neutral-600 hover:bg-zz-neutral-50 sm:opacity-0 sm:group-hover:opacity-100 transition-all flex-shrink-0",
                                       children: (0, o.jsx)(z, { size: 13 }),
                                     }),
                                     (0, o.jsx)("button", {
@@ -16327,7 +16547,7 @@
                     }),
                     (0, o.jsxs)("span", {
                       className:
-                        "text-2xl font-bold text-emerald-700 tabular-nums",
+                        "text-2xl font-bold text-zz-neutral-700 tabular-nums",
                       children: [k, "%"],
                     }),
                   ],
@@ -16337,7 +16557,7 @@
                     "w-full h-2.5 bg-stone-100 rounded-full overflow-hidden mb-3",
                   children: (0, o.jsx)("div", {
                     className:
-                      "h-full bg-emerald-500 rounded-full transition-all duration-500",
+                      "h-full bg-zz-neutral-500 rounded-full transition-all duration-500",
                     style: { width: `${k}%` },
                   }),
                 }),
@@ -16348,7 +16568,7 @@
                 w &&
                   (0, o.jsxs)("div", {
                     className:
-                      "mt-3 flex items-center gap-2 p-3 bg-emerald-50 rounded-xl text-emerald-800 text-sm font-medium",
+                      "mt-3 flex items-center gap-2 p-3 bg-zz-neutral-50 rounded-xl text-zz-neutral-800 text-sm font-medium",
                     children: [
                       (0, o.jsx)($, { size: 16 }),
                       " Einkauf erledigt! 🎉",
@@ -16382,7 +16602,7 @@
                                 children: e.label,
                               }),
                               (0, o.jsxs)("span", {
-                                className: `font-semibold ${t === e.items.length ? "text-emerald-600" : "text-stone-400"}`,
+                                className: `font-semibold ${t === e.items.length ? "text-zz-neutral-600" : "text-stone-400"}`,
                                 children: [t, "/", e.items.length],
                               }),
                             ],
@@ -16392,7 +16612,7 @@
                               "w-full h-1 bg-stone-100 rounded-full overflow-hidden",
                             children: (0, o.jsx)("div", {
                               className:
-                                "h-full bg-emerald-400 rounded-full transition-all duration-300",
+                                "h-full bg-zz-neutral-400 rounded-full transition-all duration-300",
                               style: { width: `${n}%` },
                             }),
                           }),
@@ -16452,11 +16672,11 @@
               onKeyDown: u,
               placeholder: "z.B. Zahnpasta, Waschmittel…",
               className:
-                "flex-1 min-w-0 px-4 py-2.5 rounded-xl border border-stone-200 bg-stone-50 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all placeholder:text-stone-300 zz-extra-name",
+                "flex-1 min-w-0 px-4 py-2.5 rounded-xl border border-stone-200 bg-stone-50 text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-zz-neutral-500 focus:border-transparent transition-all placeholder:text-stone-300 zz-extra-name",
             }),
             (0, o.jsxs)("div", {
               className:
-                "flex items-center rounded-xl border border-stone-200 bg-stone-50 overflow-hidden focus-within:ring-2 focus-within:ring-emerald-500 transition-all flex-shrink-0",
+                "flex items-center rounded-xl border border-stone-200 bg-stone-50 overflow-hidden focus-within:ring-2 focus-within:ring-zz-neutral-500 transition-all flex-shrink-0",
               children: [
                 (0, o.jsx)("input", {
                   type: "number",
@@ -16492,7 +16712,7 @@
               "aria-label": "Artikel hinzufügen",
               disabled: !e.trim(),
               className:
-                "w-10 h-10 flex items-center justify-center rounded-xl bg-emerald-700 hover:bg-emerald-800 disabled:opacity-40 disabled:cursor-not-allowed text-white transition-colors flex-shrink-0",
+                "w-10 h-10 flex items-center justify-center rounded-xl zz-cta bg-zz-neutral-700 hover:bg-zz-neutral-800 disabled:opacity-40 disabled:cursor-not-allowed text-white transition-colors flex-shrink-0",
               children: (0, o.jsx)(w, { size: 18 }),
             }),
           ],
@@ -17742,12 +17962,880 @@
       ...e,
     });
   };
+  // ============================================================================
+  // Tagesplanung + Verlauf (2026-11): Tabelle `meal_days`, eine Zeile pro
+  // Mahlzeit an einem konkreten Datum. Der bisherige Wochenplan (`plan_items`:
+  // Auswahl + Portionen) bleibt unverändert die Grundlage der Einkaufsliste;
+  // `meal_days` ordnet die ausgewählten Rezepte zusätzlich Tagen zu und bildet
+  // über vergangene Tage den Verlauf ("was gab es wann"). `recipe_name` ist eine
+  // Kopie des Namens, damit der Verlauf auch nach dem Löschen eines Rezepts
+  // lesbar bleibt (recipe_id wird dann per "on delete set null" leer).
+  // Fehlt die Tabelle noch (SQL nicht ausgeführt), läuft die Tagesplanung nur
+  // lokal auf dem Gerät und wird beim ersten erfolgreichen Laden hochgeladen.
+  // SQL: siehe arbeitsplan.md, Abschnitt 6f.
+  // ============================================================================
+  const ZZ_DAYS_LOCAL_KEY = "zzMealDaysLocal";
+  const ZZ_WEEKDAYS = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
+  const ZZ_WEEKDAYS_LONG = [
+    "Montag",
+    "Dienstag",
+    "Mittwoch",
+    "Donnerstag",
+    "Freitag",
+    "Samstag",
+    "Sonntag",
+  ];
+  const ZZ_MONTHS = [
+    "Jan.",
+    "Feb.",
+    "März",
+    "Apr.",
+    "Mai",
+    "Juni",
+    "Juli",
+    "Aug.",
+    "Sep.",
+    "Okt.",
+    "Nov.",
+    "Dez.",
+  ];
+  function zzH(type, props, ...kids) {
+    kids = kids.filter((k) => k !== null && k !== void 0 && k !== !1);
+    return kids.length > 1
+      ? (0, o.jsxs)(type, { ...props, children: kids })
+      : (0, o.jsx)(type, { ...props, children: kids[0] });
+  }
+  function zzDateKey(d) {
+    let m = d.getMonth() + 1,
+      t = d.getDate();
+    return `${d.getFullYear()}-${m < 10 ? "0" : ""}${m}-${t < 10 ? "0" : ""}${t}`;
+  }
+  function zzParseKey(k) {
+    let [y, m, d] = k.split("-").map(Number);
+    return new Date(y, m - 1, d);
+  }
+  function zzAddDays(k, n) {
+    let d = zzParseKey(k);
+    d.setDate(d.getDate() + n);
+    return zzDateKey(d);
+  }
+  function zzTodayKey() {
+    return zzDateKey(new Date());
+  }
+  function zzWeekdayIdx(k) {
+    return (zzParseKey(k).getDay() + 6) % 7;
+  }
+  function zzMondayOf(k) {
+    return zzAddDays(k, -zzWeekdayIdx(k));
+  }
+  function zzIsoWeek(k) {
+    let d = zzParseKey(k);
+    d.setDate(d.getDate() + 3 - ((d.getDay() + 6) % 7));
+    let w1 = new Date(d.getFullYear(), 0, 4);
+    return (
+      1 +
+      Math.round(
+        ((d - w1) / 864e5 - 3 + ((w1.getDay() + 6) % 7)) / 7,
+      )
+    );
+  }
+  function zzShortDate(k) {
+    let d = zzParseKey(k);
+    return `${d.getDate()}.${d.getMonth() + 1}.`;
+  }
+  function zzWeekRange(monday) {
+    let a = zzParseKey(monday),
+      b = zzParseKey(zzAddDays(monday, 6));
+    return a.getMonth() === b.getMonth()
+      ? `${a.getDate()}.–${b.getDate()}. ${ZZ_MONTHS[b.getMonth()]}`
+      : `${a.getDate()}. ${ZZ_MONTHS[a.getMonth()]} – ${b.getDate()}. ${ZZ_MONTHS[b.getMonth()]}`;
+  }
+  function zzIsMissingTable(err) {
+    let c = (err && err.code) || "",
+      m = (err && err.message) || "";
+    return (
+      "42P01" === c ||
+      "PGRST205" === c ||
+      /meal_days/.test(m) && /does not exist|could not find|schema cache/i.test(m)
+    );
+  }
+  function zzDayRowToApp(r) {
+    return {
+      id: r.id,
+      day: r.day,
+      recipeId: r.recipe_id,
+      recipeName: r.recipe_name,
+      portions: r.portions,
+      position: r.position ?? 0,
+    };
+  }
+  function zzDayAppToRow(m) {
+    return {
+      id: m.id,
+      day: m.day,
+      recipe_id: m.recipeId || null,
+      recipe_name: m.recipeName,
+      portions: m.portions,
+      position: m.position ?? 0,
+      updated_at: new Date().toISOString(),
+    };
+  }
+  function zzLocalDaysRead() {
+    try {
+      let v = JSON.parse(localStorage.getItem(ZZ_DAYS_LOCAL_KEY) || "null");
+      return Array.isArray(v) ? v : null;
+    } catch (e) {
+      return null;
+    }
+  }
+  function zzLocalDaysWrite(v) {
+    try {
+      null === v
+        ? localStorage.removeItem(ZZ_DAYS_LOCAL_KEY)
+        : localStorage.setItem(ZZ_DAYS_LOCAL_KEY, JSON.stringify(v));
+    } catch (e) {}
+  }
+  function uMealDays() {
+    let [zzDays, zzSetDaysRaw] = (0, i.useState)([]);
+    let [zzLd, zzSetLd] = (0, i.useState)(!1);
+    // localOnly: Tabelle fehlt in Supabase -> nur auf diesem Gerät speichern.
+    let [zzLocalOnly, zzSetLocalOnly] = (0, i.useState)(!window.supabaseClient);
+    let zzLocalRef = (0, i.useRef)(!window.supabaseClient);
+    (0, i.useEffect)(() => {
+      if (!window.supabaseClient) {
+        zzSetDaysRaw(zzLocalDaysRead() || []);
+        zzSetLd(!0);
+        return;
+      }
+      (async () => {
+        try {
+          let { data: zzRows, error: zzErr } = await window.supabaseClient
+            .from("meal_days")
+            .select("*");
+          if (zzErr) throw zzErr;
+          let zzMapped = (zzRows || []).map(zzDayRowToApp);
+          let zzLocal = zzLocalDaysRead();
+          if (zzLocal && zzLocal.length) {
+            // Einmalige Übernahme der zuvor nur lokal gespeicherten Tage.
+            let zzKnown = new Set(zzMapped.map((m) => m.id));
+            let zzNew = zzLocal.filter((m) => !zzKnown.has(m.id));
+            if (zzNew.length) {
+              let { error: zzInsErr } = await window.supabaseClient
+                .from("meal_days")
+                .upsert(zzNew.map(zzDayAppToRow));
+              if (!zzInsErr) zzMapped = zzMapped.concat(zzNew);
+              else throw zzInsErr;
+            }
+            zzLocalDaysWrite(null);
+          }
+          (zzSetDaysRaw(zzMapped), zzCacheWrite("days", zzMapped));
+        } catch (zzLoadErr) {
+          if (zzIsMissingTable(zzLoadErr)) {
+            zzLocalRef.current = !0;
+            zzSetLocalOnly(!0);
+            zzSetDaysRaw(zzLocalDaysRead() || []);
+          } else {
+            let zzCached = zzCacheRead("days");
+            zzCached
+              ? zzSetDaysRaw(zzCached)
+              : window.ee &&
+                ee.toast &&
+                ee.toast.error(
+                  "Fehler beim Laden der Tagesplanung: " + zzLoadErr.message,
+                );
+          }
+        } finally {
+          zzSetLd(!0);
+        }
+      })();
+    }, []);
+    (0, i.useEffect)(() => {
+      if (!zzLd) return;
+      zzLocalRef.current
+        ? zzLocalDaysWrite(zzDays)
+        : zzCacheWrite("days", zzDays);
+    }, [zzDays, zzLd]);
+    let zzSync = (0, i.useCallback)((zzOld, zzNext) => {
+      if (!window.supabaseClient || zzLocalRef.current) return;
+      let zzOldById = {};
+      zzOld.forEach((m) => (zzOldById[m.id] = m));
+      let zzNextIds = new Set(zzNext.map((m) => m.id));
+      let zzToDelete = zzOld.filter((m) => !zzNextIds.has(m.id)).map((m) => m.id);
+      let zzToUpsert = zzNext.filter((m) => {
+        let p = zzOldById[m.id];
+        return (
+          !p ||
+          p.day !== m.day ||
+          p.position !== m.position ||
+          p.portions !== m.portions ||
+          p.recipeId !== m.recipeId ||
+          p.recipeName !== m.recipeName
+        );
+      });
+      (async () => {
+        if (zzToUpsert.length) {
+          let zzRes = await zzSendOrQueue({
+            table: "meal_days",
+            type: "upsert",
+            rows: zzToUpsert.map(zzDayAppToRow),
+          });
+          zzRes.error &&
+            ee.toast.error(
+              "Fehler beim Speichern der Tagesplanung: " + zzRes.error.message,
+            );
+        }
+        if (zzToDelete.length) {
+          let zzRes = await zzSendOrQueue({
+            table: "meal_days",
+            type: "delete",
+            pk: "id",
+            ids: zzToDelete,
+          });
+          zzRes.error &&
+            ee.toast.error(
+              "Fehler beim Löschen in der Tagesplanung: " + zzRes.error.message,
+            );
+        }
+      })();
+    }, []);
+    let zzSetDays = (0, i.useCallback)(
+      (update) => {
+        zzSetDaysRaw((old) => {
+          let next = "function" == typeof update ? update(old) : update;
+          zzSync(old, next);
+          return next;
+        });
+      },
+      [zzSync],
+    );
+    return [zzDays, zzSetDays, zzLd, zzLocalOnly];
+  }
+  // Reine Hilfsfunktionen für Änderungen an der Tagesliste ------------------
+  function zzNextPos(days, day) {
+    return (
+      days
+        .filter((m) => m.day === day)
+        .reduce((mx, m) => Math.max(mx, m.position ?? 0), -1) + 1
+    );
+  }
+  function zzMoveMeal(days, id, day) {
+    let m = days.find((x) => x.id === id);
+    if (!m || m.day === day) return days;
+    let pos = zzNextPos(days, day);
+    return days.map((x) => (x.id === id ? { ...x, day, position: pos } : x));
+  }
+  function zzSwapMeals(days, idA, idB) {
+    let a = days.find((x) => x.id === idA),
+      b = days.find((x) => x.id === idB);
+    if (!a || !b || a.id === b.id) return days;
+    if (a.day === b.day)
+      return days.map((x) =>
+        x.id === a.id
+          ? { ...x, position: b.position }
+          : x.id === b.id
+            ? { ...x, position: a.position }
+            : x,
+      );
+    return days.map((x) =>
+      x.id === a.id
+        ? { ...x, day: b.day, position: b.position }
+        : x.id === b.id
+          ? { ...x, day: a.day, position: a.position }
+          : x,
+    );
+  }
+  function zzNewMeal(days, day, recipe, portions) {
+    return {
+      id: crypto.randomUUID(),
+      day,
+      recipeId: recipe.id,
+      recipeName: recipe.name,
+      portions: portions ?? recipe.portions ?? 4,
+      position: zzNextPos(days, day),
+    };
+  }
+  // Verteilt Rezepte, die ab heute noch keinen Tag haben, auf die nächsten
+  // freien Tage (ab heute). Gibt [neueListe, zugeteilteTage] zurück.
+  function zzAutoAssign(days, recipes, plan) {
+    let today = zzTodayKey();
+    let next = days.slice(),
+      assigned = [];
+    recipes.forEach((r) => {
+      if (next.some((m) => m.recipeId === r.id && m.day >= today)) return;
+      let day = today;
+      for (let n = 0; n < 60 && next.some((m) => m.day === day); n++)
+        day = zzAddDays(day, 1);
+      next.push(zzNewMeal(next, day, r, plan[r.id]?.portions));
+      assigned.push(day);
+    });
+    return [next, assigned];
+  }
+  // Icons --------------------------------------------------------------------
+  function zzSvg(size, kids, extra) {
+    return (0, o.jsx)("svg", {
+      xmlns: "http://www.w3.org/2000/svg",
+      width: size,
+      height: size,
+      viewBox: "0 0 24 24",
+      fill: "none",
+      stroke: "currentColor",
+      strokeWidth: 2,
+      strokeLinecap: "round",
+      strokeLinejoin: "round",
+      "aria-hidden": "true",
+      ...(extra || {}),
+      children: kids,
+    });
+  }
+  const zzIconGrip = (s) =>
+    zzSvg(s || 18, [
+      [9, 6],
+      [15, 6],
+      [9, 12],
+      [15, 12],
+      [9, 18],
+      [15, 18],
+    ].map(([cx, cy]) =>
+      (0, o.jsx)(
+        "circle",
+        { cx, cy, r: 1.4, fill: "currentColor", stroke: "none" },
+        cx + "-" + cy,
+      ),
+    ));
+  const zzIconChevron = (dir, s) =>
+    zzSvg(s || 18, (0, o.jsx)("path", { d: "left" === dir ? "M15 18l-6-6 6-6" : "M9 18l6-6-6-6" }));
+  const zzIconX = (s) =>
+    zzSvg(s || 16, [
+      (0, o.jsx)("path", { d: "M18 6 6 18" }, "a"),
+      (0, o.jsx)("path", { d: "M6 6l12 12" }, "b"),
+    ]);
+  // Drag and Drop per Pointer Events (Maus, Touch, Stift). Gezogen wird am
+  // Griff (touch-action:none), damit der Rest der Seite normal scrollbar
+  // bleibt. Ein Antippen ohne Ziehen öffnet stattdessen die Tagesauswahl --
+  // das ist zugleich der barrierefreie Weg ohne Ziehen (Tastatur, Screenreader).
+  function zzUseMealDrag({ onDropDay, onDropMeal, onHoverNav }) {
+    let st = (0, i.useRef)(null);
+    let [zzDragId, zzSetDragId] = (0, i.useState)(null);
+    let [zzOver, zzSetOver] = (0, i.useState)(null);
+    let cbRef = (0, i.useRef)({});
+    cbRef.current = { onDropDay, onDropMeal, onHoverNav };
+    let zzHit = (x, y) => {
+      let el = document.elementFromPoint(x, y);
+      if (!el) return null;
+      let nav = el.closest("[data-zz-weeknav]");
+      if (nav) return { nav: nav.getAttribute("data-zz-weeknav") };
+      let meal = el.closest("[data-zz-meal]");
+      if (meal && meal.getAttribute("data-zz-meal") !== st.current.id)
+        return { meal: meal.getAttribute("data-zz-meal") };
+      let day = el.closest("[data-zz-day]");
+      if (day) return { day: day.getAttribute("data-zz-day") };
+      return null;
+    };
+    let zzCleanup = () => {
+      let s = st.current;
+      if (!s) return;
+      s.ghost && s.ghost.remove();
+      s.timer && clearInterval(s.timer);
+      s.navTimer && clearTimeout(s.navTimer);
+      document.body.classList.remove("zz-dragging");
+      st.current = null;
+      zzSetDragId(null);
+      zzSetOver(null);
+    };
+    (0, i.useEffect)(() => zzCleanup, []);
+    let onPointerDown = (ev, id) => {
+      if ("mouse" === ev.pointerType && 0 !== ev.button) return;
+      let card = ev.currentTarget.closest("[data-zz-meal]");
+      st.current = {
+        id,
+        card,
+        x0: ev.clientX,
+        y0: ev.clientY,
+        x: ev.clientX,
+        y: ev.clientY,
+        active: !1,
+        ghost: null,
+        over: null,
+      };
+      try {
+        ev.currentTarget.setPointerCapture(ev.pointerId);
+      } catch (e) {}
+    };
+    let onPointerMove = (ev) => {
+      let s = st.current;
+      if (!s) return;
+      s.x = ev.clientX;
+      s.y = ev.clientY;
+      if (!s.active) {
+        if (Math.hypot(s.x - s.x0, s.y - s.y0) < 6) return;
+        s.active = !0;
+        let r = s.card.getBoundingClientRect();
+        s.dx = s.x0 - r.left;
+        s.dy = s.y0 - r.top;
+        let g = s.card.cloneNode(!0);
+        g.classList.add("zz-drag-ghost");
+        g.removeAttribute("data-zz-meal");
+        g.style.width = r.width + "px";
+        document.body.appendChild(g);
+        s.ghost = g;
+        document.body.classList.add("zz-dragging");
+        zzSetDragId(s.id);
+        // Automatisches Scrollen am Bildschirmrand (wichtig am Handy).
+        s.timer = setInterval(() => {
+          let edge = 70,
+            h = window.innerHeight;
+          s.y < edge
+            ? window.scrollBy(0, -Math.ceil((edge - s.y) / 4))
+            : s.y > h - edge && window.scrollBy(0, Math.ceil((s.y - (h - edge)) / 4));
+        }, 16);
+      }
+      ev.preventDefault();
+      s.ghost.style.transform = `translate(${s.x - s.dx}px, ${s.y - s.dy}px) rotate(1.5deg)`;
+      let hit = zzHit(s.x, s.y);
+      let key = hit ? hit.nav || hit.meal || hit.day : null;
+      if (key !== s.overKey) {
+        s.overKey = key;
+        s.over = hit;
+        zzSetOver(hit);
+        s.navTimer && clearTimeout(s.navTimer);
+        s.navTimer = null;
+        if (hit && hit.nav) {
+          let dir = hit.nav;
+          let tick = () => {
+            cbRef.current.onHoverNav && cbRef.current.onHoverNav(dir);
+            s.navTimer = setTimeout(tick, 900);
+          };
+          s.navTimer = setTimeout(tick, 600);
+        }
+      }
+    };
+    let onPointerUp = (ev) => {
+      let s = st.current;
+      if (!s) return;
+      if (s.active) {
+        s.suppressClick = !0;
+        let hit = s.over,
+          id = s.id;
+        zzCleanup();
+        st.lastDragEnd = Date.now();
+        hit &&
+          (hit.meal
+            ? cbRef.current.onDropMeal(id, hit.meal)
+            : hit.day && cbRef.current.onDropDay(id, hit.day));
+      } else st.current = null;
+    };
+    let onPointerCancel = () => zzCleanup();
+    // Klick direkt nach einem Ziehen ignorieren (einmalig verbraucht).
+    let wasDrag = () => {
+      let r = !!st.lastDragEnd && Date.now() - st.lastDragEnd < 350;
+      st.lastDragEnd = 0;
+      return r;
+    };
+    return {
+      zzDragId,
+      zzOver,
+      wasDrag,
+      handleProps: (id) => ({
+        onPointerDown: (ev) => onPointerDown(ev, id),
+        onPointerMove,
+        onPointerUp,
+        onPointerCancel,
+      }),
+    };
+  }
+  // Wochenansicht ("Abfahrtstafel") ----------------------------------------
+  function zzWeekBoard({
+    days,
+    recipes,
+    onMove,
+    onSwap,
+    onRemove,
+    onAdd,
+    localOnly,
+  }) {
+    let today = zzTodayKey();
+    let [zzMonday, zzSetMonday] = (0, i.useState)(() => zzMondayOf(today));
+    let [zzOpenId, zzSetOpenId] = (0, i.useState)(null);
+    let zzShift = (n) => zzSetMonday((m) => zzAddDays(m, 7 * n));
+    let drag = zzUseMealDrag({
+      onDropDay: (id, day) => {
+        let m = days.find((x) => x.id === id);
+        if (m && m.day !== day) {
+          onMove(id, day);
+          ee.toast.success(
+            `${m.recipeName} → ${ZZ_WEEKDAYS_LONG[zzWeekdayIdx(day)]}, ${zzShortDate(day)}`,
+          );
+        }
+      },
+      onDropMeal: (id, otherId) => {
+        let a = days.find((x) => x.id === id),
+          b = days.find((x) => x.id === otherId);
+        if (a && b) {
+          onSwap(id, otherId);
+          a.day !== b.day &&
+            ee.toast.success(`${a.recipeName} und ${b.recipeName} getauscht`);
+        }
+      },
+      onHoverNav: (dir) => zzShift("prev" === dir ? -1 : 1),
+    });
+    let week = [0, 1, 2, 3, 4, 5, 6].map((n) => zzAddDays(zzMonday, n));
+    let isThisWeek = zzMonday === zzMondayOf(today);
+    let planned = days.filter((m) => m.day >= week[0] && m.day <= week[6]).length;
+    let zzMealCard = (m) => {
+      let open = zzOpenId === m.id;
+      let isOver = drag.zzOver && drag.zzOver.meal === m.id;
+      return zzH(
+        "div",
+        {
+          key: m.id,
+          "data-zz-meal": m.id,
+          className: `zz-meal${drag.zzDragId === m.id ? " zz-meal-dragging" : ""}${isOver ? " zz-meal-over" : ""}`,
+        },
+        zzH(
+          "div",
+          { className: "zz-meal-row" },
+          zzH(
+            "button",
+            {
+              type: "button",
+              className: "zz-meal-handle",
+              "aria-label": `${m.recipeName} verschieben`,
+              "aria-expanded": open,
+              title: "Ziehen zum Verschieben, antippen für Tagesauswahl",
+              ...drag.handleProps(m.id),
+              onClick: () => {
+                drag.wasDrag() || zzSetOpenId(open ? null : m.id);
+              },
+            },
+            zzIconGrip(18),
+          ),
+          zzH(
+            "button",
+            {
+              type: "button",
+              className: "zz-meal-name",
+              onClick: () => zzSetOpenId(open ? null : m.id),
+            },
+            zzH("span", { className: "zz-meal-title" }, m.recipeName),
+            zzH("span", { className: "zz-meal-port" }, `${m.portions} Port.`),
+          ),
+          zzH(
+            "button",
+            {
+              type: "button",
+              className: "zz-icon-btn",
+              "aria-label": `${m.recipeName} von diesem Tag entfernen`,
+              onClick: () => {
+                onRemove(m.id);
+                zzSetOpenId(null);
+              },
+            },
+            zzIconX(16),
+          ),
+        ),
+        open &&
+          zzH(
+            "div",
+            { className: "zz-move-picker", role: "group", "aria-label": "Verschieben nach" },
+            zzH("span", { className: "zz-move-label" }, "Verschieben nach"),
+            zzH(
+              "div",
+              { className: "zz-move-chips" },
+              week.map((d, n) =>
+                zzH(
+                  "button",
+                  {
+                    key: d,
+                    type: "button",
+                    className: `zz-chip${d === m.day ? " zz-chip-on" : ""}`,
+                    disabled: d === m.day,
+                    "aria-label": `${ZZ_WEEKDAYS_LONG[n]}, ${zzShortDate(d)}`,
+                    onClick: () => {
+                      onMove(m.id, d);
+                      zzSetOpenId(null);
+                    },
+                  },
+                  ZZ_WEEKDAYS[n],
+                ),
+              ),
+              zzH(
+                "button",
+                {
+                  type: "button",
+                  className: "zz-chip zz-chip-wide",
+                  onClick: () => {
+                    onMove(m.id, zzAddDays(m.day, 7));
+                    zzSetOpenId(null);
+                    ee.toast.success(`${m.recipeName} → nächste Woche`);
+                  },
+                },
+                "Nächste Woche",
+              ),
+            ),
+          ),
+      );
+    };
+    return zzH(
+      "section",
+      { className: "zz-week", "aria-label": "Wochenübersicht" },
+      zzH(
+        "div",
+        { className: "zz-week-head" },
+        zzH(
+          "button",
+          {
+            type: "button",
+            className: "zz-icon-btn",
+            "data-zz-weeknav": "prev",
+            "aria-label": "Vorige Woche",
+            onClick: () => zzShift(-1),
+          },
+          zzIconChevron("left"),
+        ),
+        zzH(
+          "div",
+          { className: "zz-week-title" },
+          zzH(
+            "h2",
+            { className: "font-display text-2xl text-stone-800" },
+            isThisWeek ? "Diese Woche" : `KW ${zzIsoWeek(zzMonday)}`,
+          ),
+          zzH(
+            "p",
+            { className: "text-stone-500 text-sm" },
+            `${isThisWeek ? `KW ${zzIsoWeek(zzMonday)} · ` : ""}${zzWeekRange(zzMonday)}`,
+          ),
+        ),
+        zzH(
+          "button",
+          {
+            type: "button",
+            className: "zz-icon-btn",
+            "data-zz-weeknav": "next",
+            "aria-label": "Nächste Woche",
+            onClick: () => zzShift(1),
+          },
+          zzIconChevron("right"),
+        ),
+        !isThisWeek &&
+          zzH(
+            "button",
+            {
+              type: "button",
+              className: "zz-chip zz-today-btn",
+              onClick: () => zzSetMonday(zzMondayOf(today)),
+            },
+            "Heute",
+          ),
+      ),
+      localOnly &&
+        window.supabaseClient &&
+        zzH(
+          "p",
+          { className: "zz-week-note" },
+          "Die Tagesplanung wird vorerst nur auf diesem Gerät gespeichert. Sobald die Datenbank erweitert ist, wird sie automatisch hochgeladen.",
+        ),
+      0 === planned &&
+        zzH(
+          "p",
+          { className: "zz-week-hint" },
+          "Noch nichts eingeplant. Wähle unten Rezepte aus, sie landen automatisch auf den nächsten freien Tagen. Danach kannst du sie am Griff auf einen anderen Tag ziehen.",
+        ),
+      zzH(
+        "ol",
+        { className: "zz-days" },
+        week.map((d, n) => {
+          let meals = days
+            .filter((m) => m.day === d)
+            .sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
+          let isToday = d === today,
+            isPast = d < today,
+            isOver = drag.zzOver && drag.zzOver.day === d;
+          return zzH(
+            "li",
+            {
+              key: d,
+              "data-zz-day": d,
+              className: `zz-day${isPast ? " zz-day-past" : ""}${isOver ? " zz-day-over" : ""}`,
+            },
+            zzH(
+              "div",
+              { className: `zz-day-label${isToday ? " zz-current" : ""}` },
+              zzH("span", { className: "zz-day-name" }, ZZ_WEEKDAYS[n]),
+              zzH("span", { className: "zz-day-date" }, isToday ? "Heute" : zzShortDate(d)),
+            ),
+            zzH(
+              "div",
+              { className: "zz-day-meals" },
+              meals.map(zzMealCard),
+              zzH(
+                "label",
+                { className: `zz-day-add${meals.length ? " zz-day-add-more" : ""}` },
+                zzH("span", { className: "zz-sr-only" }, `Rezept für ${ZZ_WEEKDAYS_LONG[n]} hinzufügen`),
+                zzH(
+                  "select",
+                  {
+                    value: "",
+                    onChange: (ev) => {
+                      let r = recipes.find((x) => x.id === ev.target.value);
+                      r && onAdd(d, r);
+                    },
+                  },
+                  zzH("option", { value: "" }, meals.length ? "+ weiteres" : "+ Rezept"),
+                  recipes
+                    .slice()
+                    .sort((a, b) => a.name.localeCompare(b.name, "de"))
+                    .map((r) => zzH("option", { key: r.id, value: r.id }, r.name)),
+                ),
+              ),
+            ),
+          );
+        }),
+      ),
+    );
+  }
+  // Verlauf: vergangene Wochen, jüngste zuerst ------------------------------
+  function zzHistory({ days }) {
+    let [zzWeeks, zzSetWeeks] = (0, i.useState)(6);
+    let thisMonday = zzMondayOf(zzTodayKey());
+    let past = days.filter((m) => m.day < thisMonday);
+    let byWeek = {};
+    past.forEach((m) => {
+      let k = zzMondayOf(m.day);
+      (byWeek[k] = byWeek[k] || []).push(m);
+    });
+    let mondays = Object.keys(byWeek).sort().reverse();
+    // Häufigkeit über die letzten 8 Wochen
+    let since = zzAddDays(thisMonday, -56);
+    let counts = {};
+    past
+      .filter((m) => m.day >= since)
+      .forEach((m) => {
+        let k = m.recipeId || "name:" + m.recipeName;
+        counts[k] = counts[k] || { name: m.recipeName, n: 0, last: m.day };
+        counts[k].n++;
+        m.day > counts[k].last && (counts[k].last = m.day);
+      });
+    let top = Object.values(counts)
+      .sort((a, b) => b.n - a.n || (a.last < b.last ? 1 : -1))
+      .slice(0, 5);
+    if (!mondays.length)
+      return zzH(
+        "div",
+        { className: "zz-history-empty" },
+        zzH("p", { className: "text-base font-medium text-stone-500" }, "Noch kein Verlauf"),
+        zzH(
+          "p",
+          { className: "text-sm text-stone-400 mt-1" },
+          "Hier erscheinen vergangene Wochen, sobald du Rezepte auf Tage einplanst.",
+        ),
+      );
+    return zzH(
+      "div",
+      { className: "zz-history" },
+      top.length > 0 &&
+        zzH(
+          "section",
+          { className: "zz-history-top" },
+          zzH("h3", { className: "font-display text-lg text-stone-800" }, "Am häufigsten (letzte 8 Wochen)"),
+          zzH(
+            "ol",
+            null,
+            top.map((t) =>
+              zzH(
+                "li",
+                { key: t.name + t.last },
+                zzH("span", { className: "zz-history-name" }, t.name),
+                zzH("span", { className: "zz-history-meta" }, `${t.n}× · zuletzt ${zzShortDate(t.last)}`),
+              ),
+            ),
+          ),
+        ),
+      mondays.slice(0, zzWeeks).map((mo) =>
+        zzH(
+          "section",
+          { key: mo, className: "zz-history-week" },
+          zzH(
+            "h3",
+            { className: "zz-panel-band" },
+            `KW ${zzIsoWeek(mo)} · ${zzWeekRange(mo)}`,
+          ),
+          zzH(
+            "ul",
+            null,
+            byWeek[mo]
+              .slice()
+              .sort((a, b) => (a.day < b.day ? -1 : a.day > b.day ? 1 : (a.position ?? 0) - (b.position ?? 0)))
+              .map((m) =>
+                zzH(
+                  "li",
+                  { key: m.id },
+                  zzH("span", { className: "zz-history-day" }, `${ZZ_WEEKDAYS[zzWeekdayIdx(m.day)]} ${zzShortDate(m.day)}`),
+                  zzH("span", { className: "zz-history-name" }, m.recipeName),
+                  zzH("span", { className: "zz-history-meta" }, `${m.portions} Port.`),
+                ),
+              ),
+          ),
+        ),
+      ),
+      mondays.length > zzWeeks &&
+        zzH(
+          "button",
+          {
+            type: "button",
+            className: "zz-chip zz-chip-wide zz-history-more",
+            onClick: () => zzSetWeeks((n) => n + 6),
+          },
+          "Ältere Wochen anzeigen",
+        ),
+    );
+  }
+  // Wochenplan-Reiter: Umschalter Planen / Verlauf ---------------------------
+  function zzPlanTab({ days, recipes, onMove, onSwap, onRemove, onAdd, localOnly, children }) {
+    let [zzMode, zzSetMode] = (0, i.useState)("plan");
+    return zzH(
+      "div",
+      null,
+      recipes.length > 0 &&
+        zzH(
+          "div",
+          { className: "zz-seg", role: "tablist", "aria-label": "Ansicht" },
+          [
+            ["plan", "Planen"],
+            ["history", "Verlauf"],
+          ].map(([id, label]) =>
+            zzH(
+              "button",
+              {
+                key: id,
+                type: "button",
+                role: "tab",
+                "aria-selected": zzMode === id,
+                className: `zz-seg-btn${zzMode === id ? " zz-seg-on" : ""}`,
+                onClick: () => zzSetMode(id),
+              },
+              label,
+            ),
+          ),
+        ),
+      "history" === zzMode
+        ? zzH(zzHistory, { days })
+        : zzH(
+            "div",
+            null,
+            recipes.length > 0 &&
+              zzH(zzWeekBoard, { days, recipes, onMove, onSwap, onRemove, onAdd, localOnly }),
+            children,
+          ),
+    );
+  }
   let zzApp = function () {
     let [e, t] = (0, i.useState)("recipes"),
       [n, zzRL, zzSaveRecipe, zzDeleteRecipe] = uRecipes(),
       [a, l, zzPL] = uPlan(),
       [s, c, zzSL] = uShoppingItems(),
-      zzLoaded = zzRL && zzPL && zzSL,
+      [zzDays, zzSetDays, zzDL, zzDaysLocal] = uMealDays(),
+      zzLoaded = zzRL && zzPL && zzSL && zzDL,
       zzOfflineStatus = zzUseOfflineStatus(),
       d = (0, i.useRef)(null),
       f = s.filter((e) => !e.checked).length,
@@ -17764,8 +18852,23 @@
           className: "text-center text-stone-400",
           children: [
             (0, o.jsx)("div", {
-              className: "text-4xl mb-3 animate-pulse",
-              children: "🍳",
+              className: "mb-3 flex justify-center animate-pulse",
+              children: (0, o.jsxs)("svg", {
+                xmlns: "http://www.w3.org/2000/svg",
+                width: 36,
+                height: 36,
+                viewBox: "0 0 24 24",
+                fill: "none",
+                stroke: "currentColor",
+                strokeWidth: 2,
+                strokeLinecap: "round",
+                strokeLinejoin: "round",
+                "aria-hidden": "true",
+                children: [
+                  (0, o.jsx)("circle", { cx: 12, cy: 9, r: 6 }),
+                  (0, o.jsx)("rect", { x: 7, y: 13, width: 10, height: 7, rx: 1 }),
+                ],
+              }),
             }),
             (0, o.jsx)("p", {
               className: "text-sm font-medium",
@@ -17788,7 +18891,7 @@
                 children: [
                   (0, o.jsx)("div", {
                     className:
-                      "w-9 h-9 bg-emerald-700 rounded-xl flex items-center justify-center",
+                      "w-9 h-9 bg-zz-neutral-700 rounded-xl flex items-center justify-center",
                     children: (0, o.jsx)(K, {
                       size: 18,
                       className: "text-white",
@@ -17807,7 +18910,7 @@
                     "button",
                     {
                       onClick: () => t(n),
-                      className: `relative flex items-center gap-1.5 px-3 py-3 rounded-lg text-sm font-medium transition-all ${e === n ? "bg-emerald-50 text-emerald-800" : "text-stone-500 hover:text-stone-800 hover:bg-stone-100"}`,
+                      className: `relative flex items-center gap-1.5 px-3 py-3 rounded-lg text-sm font-medium transition-all ${e === n ? "zz-current bg-zz-neutral-50 text-zz-neutral-800" : "text-stone-500 hover:text-stone-800 hover:bg-stone-100"}`,
                       children: [
                         (0, o.jsx)(a, { size: 16 }),
                         r,
@@ -17815,7 +18918,7 @@
                           f > 0 &&
                           (0, o.jsx)("span", {
                             className:
-                              "absolute -top-1 -right-1 bg-emerald-600 text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center",
+                              "absolute -top-1 -right-1 bg-zz-neutral-600 text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center",
                             children: f > 9 ? "9+" : f,
                           }),
                       ],
@@ -17848,38 +18951,6 @@
                       "hidden sm:inline text-xs text-stone-400 hover:text-stone-600 ml-3",
                     children: "Datenschutz",
                   }),
-                  (0, o.jsx)("button", {
-                    onClick: () => {
-                      let zzData = JSON.stringify(
-                          {
-                            recipes: n,
-                            plan: a,
-                            shoppingItems: s,
-                            exportedAt: new Date().toISOString(),
-                          },
-                          null,
-                          2,
-                        ),
-                        zzBlob = new Blob([zzData], {
-                          type: "application/json",
-                        }),
-                        zzUrl = URL.createObjectURL(zzBlob),
-                        zzA = document.createElement("a");
-                      ((zzA.href = zzUrl),
-                        (zzA.download =
-                          "meine-rezepte-backup-" +
-                          new Date().toISOString().slice(0, 10) +
-                          ".json"),
-                        document.body.appendChild(zzA),
-                        zzA.click(),
-                        document.body.removeChild(zzA),
-                        URL.revokeObjectURL(zzUrl),
-                        ee.toast.success("Sicherung heruntergeladen"));
-                    },
-                    className:
-                      "hidden sm:inline text-xs text-stone-400 hover:text-stone-600 ml-3",
-                    children: "Sichern",
-                  }),
                   window.supabaseClient &&
                     (0, o.jsx)("button", {
                       onClick: () => window.supabaseClient.auth.signOut(),
@@ -17904,6 +18975,11 @@
                 },
                 onDelete: (e) => {
                   (zzDeleteRecipe(e),
+                    zzSetDays((t) =>
+                      t.map((m) =>
+                        m.recipeId === e ? { ...m, recipeId: null } : m,
+                      ),
+                    ),
                     l((t) => {
                       let n = { ...t };
                       return (delete n[e], n);
@@ -17912,11 +18988,51 @@
                 },
               }),
             "plan" === e &&
-              (0, o.jsx)(I, {
+              (0, o.jsx)(zzPlanTab, {
+                days: zzDays,
+                recipes: n,
+                localOnly: zzDaysLocal,
+                onMove: (id, day) => zzSetDays((d) => zzMoveMeal(d, id, day)),
+                onSwap: (x, y) => zzSetDays((d) => zzSwapMeals(d, x, y)),
+                onRemove: (id) => zzSetDays((d) => d.filter((m) => m.id !== id)),
+                onAdd: (day, r) => {
+                  (zzSetDays((d) => [
+                    ...d,
+                    zzNewMeal(d, day, r, a[r.id]?.portions),
+                  ]),
+                    a[r.id]?.selected ||
+                      l((p) => ({
+                        ...p,
+                        [r.id]: {
+                          recipeId: r.id,
+                          selected: !0,
+                          portions: p[r.id]?.portions ?? r.portions ?? 4,
+                        },
+                      })));
+                },
+                children: (0, o.jsx)(I, {
                 recipes: n,
                 plan: a,
                 onGoToRecipes: () => t("recipes"),
                 onToggle: (e, t) => {
+                  let zzR = n.find((x) => x.id === e),
+                    zzToday = zzTodayKey();
+                  t && zzR
+                    ? zzSetDays((d) => {
+                        let [nd, as] = zzAutoAssign(d, [zzR], {
+                          ...a,
+                          [e]: { portions: a[e]?.portions ?? zzR.portions },
+                        });
+                        as.length &&
+                          ee.toast.success(
+                            `${zzR.name} für ${ZZ_WEEKDAYS_LONG[zzWeekdayIdx(as[0])]}, ${zzShortDate(as[0])} eingeplant`,
+                          );
+                        return nd;
+                      })
+                    : t ||
+                      zzSetDays((d) =>
+                        d.filter((m) => !(m.recipeId === e && m.day >= zzToday)),
+                      );
                   l((r) => ({
                     ...r,
                     [e]: {
@@ -17930,6 +19046,16 @@
                   }));
                 },
                 onPortions: (e, t) => {
+                  let zzToday = zzTodayKey();
+                  zzSetDays((d) =>
+                    d.some((m) => m.recipeId === e && m.day >= zzToday)
+                      ? d.map((m) =>
+                          m.recipeId === e && m.day >= zzToday
+                            ? { ...m, portions: t }
+                            : m,
+                        )
+                      : d,
+                  );
                   l((n) => ({
                     ...n,
                     [e]: {
@@ -17943,6 +19069,7 @@
                   let e = n.filter((e) => a[e.id]?.selected);
                   if (!e.length)
                     return void ee.toast.error("Kein Rezept ausgewählt");
+                  zzSetDays((d) => zzAutoAssign(d, e, a)[0]);
                   let r = {};
                   let zzFam = {
                     g: ["g", 1],
@@ -18005,6 +19132,7 @@
                       `Einkaufsliste mit ${Object.keys(r).length} ${1 === Object.keys(r).length ? "Zutat" : "Zutaten"} erstellt`,
                     ));
                 },
+              }),
               }),
             "shopping" === e &&
               (0, o.jsx)(W, {
@@ -18102,7 +19230,16 @@
               }),
           ],
         }),
-        (0, o.jsx)(ex, { position: "top-right", richColors: !0 }),
+        // Am Handy unten statt oben: oben verdecken Meldungen sonst Reiter und
+        // Umschalter; unten sitzen sie über der Aktionsleiste (siehe styles.css).
+        (0, o.jsx)(ex, {
+          position:
+            window.matchMedia && window.matchMedia("(max-width: 1023px)").matches
+              ? "bottom-center"
+              : "top-right",
+          duration: 3000,
+          richColors: !0,
+        }),
       ],
     });
   };
@@ -18177,8 +19314,23 @@
         style: { maxWidth: 380, width: "100%" },
         children: [
           (0, o.jsx)("div", {
-            className: "text-4xl mb-3 text-center",
-            children: "🍳",
+            className: "mb-3 flex justify-center",
+            children: (0, o.jsxs)("svg", {
+              xmlns: "http://www.w3.org/2000/svg",
+              width: 36,
+              height: 36,
+              viewBox: "0 0 24 24",
+              fill: "none",
+              stroke: "currentColor",
+              strokeWidth: 2,
+              strokeLinecap: "round",
+              strokeLinejoin: "round",
+              "aria-hidden": "true",
+              children: [
+                (0, o.jsx)("circle", { cx: 12, cy: 9, r: 6 }),
+                (0, o.jsx)("rect", { x: 7, y: 13, width: 10, height: 7, rx: 1 }),
+              ],
+            }),
           }),
           (0, o.jsx)("h1", {
             className: "font-display text-xl text-stone-800 mb-1 text-center",
@@ -18201,7 +19353,7 @@
                   placeholder: "Benutzername",
                   autoComplete: "username",
                   className:
-                    "w-full px-4 py-2.5 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all mb-3",
+                    "w-full px-4 py-2.5 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-zz-neutral-500 focus:border-transparent transition-all mb-3",
                 }),
                 (0, o.jsx)("input", {
                   type: "password",
@@ -18213,13 +19365,13 @@
                   placeholder: "Passwort",
                   autoComplete: "current-password",
                   className:
-                    "w-full px-4 py-2.5 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all mb-3",
+                    "w-full px-4 py-2.5 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-zz-neutral-500 focus:border-transparent transition-all mb-3",
                 }),
                 (0, o.jsx)("button", {
                   onClick: zzSubmitPassword,
                   disabled: zzBusy,
                   className:
-                    "w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-emerald-700 hover:bg-emerald-800 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-colors mb-3",
+                    "w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl zz-cta bg-zz-neutral-700 hover:bg-zz-neutral-800 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-colors mb-3",
                   children: zzBusy ? "Melde an…" : "Anmelden",
                 }),
                 (0, o.jsxs)("div", {
@@ -18235,7 +19387,7 @@
                       type: "button",
                       onClick: () => zzSetMode("magiclink"),
                       className:
-                        "text-emerald-700 hover:text-emerald-900 font-medium",
+                        "text-zz-neutral-700 hover:text-zz-neutral-900 font-medium",
                       children: "Login-Link per E-Mail",
                     }),
                   ],
@@ -18277,13 +19429,13 @@
                       },
                       placeholder: "deine@email.de",
                       className:
-                        "w-full px-4 py-2.5 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all mb-3",
+                        "w-full px-4 py-2.5 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-zz-neutral-500 focus:border-transparent transition-all mb-3",
                     }),
                     (0, o.jsx)("button", {
                       onClick: zzSubmitMagicLink,
                       disabled: zzBusy,
                       className:
-                        "w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-emerald-700 hover:bg-emerald-800 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-colors mb-3",
+                        "w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl zz-cta bg-zz-neutral-700 hover:bg-zz-neutral-800 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-colors mb-3",
                       children: zzBusy ? "Sende…" : "Link senden",
                     }),
                     (0, o.jsx)("button", {
@@ -18331,13 +19483,13 @@
                       },
                       placeholder: "Benutzername",
                       className:
-                        "w-full px-4 py-2.5 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all mb-3",
+                        "w-full px-4 py-2.5 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-zz-neutral-500 focus:border-transparent transition-all mb-3",
                     }),
                     (0, o.jsx)("button", {
                       onClick: zzSubmitReset,
                       disabled: zzBusy,
                       className:
-                        "w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-emerald-700 hover:bg-emerald-800 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-colors mb-3",
+                        "w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl zz-cta bg-zz-neutral-700 hover:bg-zz-neutral-800 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-colors mb-3",
                       children: zzBusy
                         ? "Sende…"
                         : "Link zum Zur\xfccksetzen senden",
@@ -18394,8 +19546,25 @@
         style: { maxWidth: 380, width: "100%" },
         children: [
           (0, o.jsx)("div", {
-            className: "text-4xl mb-3 text-center",
-            children: "🔑",
+            className: "mb-3 flex justify-center",
+            children: (0, o.jsxs)("svg", {
+              xmlns: "http://www.w3.org/2000/svg",
+              width: 36,
+              height: 36,
+              viewBox: "0 0 24 24",
+              fill: "none",
+              stroke: "currentColor",
+              strokeWidth: 2,
+              strokeLinecap: "round",
+              strokeLinejoin: "round",
+              "aria-hidden": "true",
+              children: [
+                (0, o.jsx)("circle", { cx: 7, cy: 15, r: 4 }),
+                (0, o.jsx)("path", { d: "M10 12L19 3" }),
+                (0, o.jsx)("path", { d: "M16 6l3 3" }),
+                (0, o.jsx)("path", { d: "M18 4l2 2" }),
+              ],
+            }),
           }),
           (0, o.jsx)("h1", {
             className: "font-display text-xl text-stone-800 mb-1 text-center",
@@ -18412,7 +19581,7 @@
             placeholder: "Neues Passwort",
             autoComplete: "new-password",
             className:
-              "w-full px-4 py-2.5 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all mb-3",
+              "w-full px-4 py-2.5 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-zz-neutral-500 focus:border-transparent transition-all mb-3",
           }),
           (0, o.jsx)("input", {
             type: "password",
@@ -18424,13 +19593,13 @@
             placeholder: "Passwort wiederholen",
             autoComplete: "new-password",
             className:
-              "w-full px-4 py-2.5 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all mb-3",
+              "w-full px-4 py-2.5 rounded-xl border border-stone-200 bg-white text-sm text-stone-800 focus:outline-none focus:ring-2 focus:ring-zz-neutral-500 focus:border-transparent transition-all mb-3",
           }),
           (0, o.jsx)("button", {
             onClick: zzSubmit,
             disabled: zzBusy,
             className:
-              "w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-emerald-700 hover:bg-emerald-800 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-colors",
+              "w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl zz-cta bg-zz-neutral-700 hover:bg-zz-neutral-800 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm transition-colors",
             children: zzBusy ? "Speichere…" : "Passwort speichern",
           }),
         ],
@@ -18470,8 +19639,23 @@
               className: "text-center text-stone-400",
               children: [
                 (0, o.jsx)("div", {
-                  className: "text-4xl mb-3 animate-pulse",
-                  children: "🍳",
+                  className: "mb-3 flex justify-center animate-pulse",
+                  children: (0, o.jsxs)("svg", {
+                    xmlns: "http://www.w3.org/2000/svg",
+                    width: 36,
+                    height: 36,
+                    viewBox: "0 0 24 24",
+                    fill: "none",
+                    stroke: "currentColor",
+                    strokeWidth: 2,
+                    strokeLinecap: "round",
+                    strokeLinejoin: "round",
+                    "aria-hidden": "true",
+                    children: [
+                      (0, o.jsx)("circle", { cx: 12, cy: 9, r: 6 }),
+                      (0, o.jsx)("rect", { x: 7, y: 13, width: 10, height: 7, rx: 1 }),
+                    ],
+                  }),
                 }),
                 (0, o.jsx)("p", {
                   className: "text-sm font-medium",

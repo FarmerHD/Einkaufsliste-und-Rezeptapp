@@ -13,7 +13,7 @@
 // kommt die zuletzt gespeicherte Version aus dem Cache. Das stellt sicher,
 // dass ein normaler Hard-Refresh nach einem neuen Deployment weiterhin sofort
 // die neue Version zeigt (kein "hängt an einer alten, gecachten Version").
-const ZZ_SW_CACHE = "meine-rezepte-shell-v1";
+const ZZ_SW_CACHE = "meine-rezepte-shell-v2";
 const ZZ_SHELL_FILES = [
   "./",
   "./index.html",
