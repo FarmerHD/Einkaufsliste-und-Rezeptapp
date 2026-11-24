@@ -8,9 +8,41 @@
    bei Doppelpunkt-Klassen (hover:, sm:, focus:) nach ".klassenname\:...".
    ============================================================================ */
 
-/* Old Inter/Playfair Display @font-face rules removed (2026-08 Leitsystem
-   redesign) — the app now self-hosts one Archivo variable font, declared
-   further down in the dedicated Leitsystem block at the end of this file. */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("fonts/inter-latin-300-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/inter-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("fonts/inter-latin-500-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("fonts/inter-latin-600-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Playfair Display";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/playfair-display-latin-400-normal.woff2") format("woff2");
+}
 @font-face {
   font-family: "Playfair Display";
   font-style: normal;
@@ -733,20 +765,6 @@ video {
 }
 .h-16 {
   min-height: 4rem;
-}
-/* zz-thumb-fixed: dedizierte Klasse für feste Bildhöhe (Wochenplan-Thumbnails).
-   Ursache des Bilder-Problems: .h-16 ist hier fälschlich als "min-height: 4rem"
-   statt "height: 4rem" definiert (Tippfehler beim Übertragen der Tailwind-Regeln).
-   Bei min-height allein bekommt das umschließende Element keine definite Höhe,
-   wodurch height:100% / object-cover beim <img> nicht greift und das Bild in
-   seinem eigenen Seitenverhältnis (statt fest 64px hoch) gerendert wird -- das
-   war der Grund für die unterschiedlich hohen Rezeptbilder im Wochenplan.
-   .h-16 selbst wird bewusst NICHT korrigiert, da die Klasse auch anderswo
-   (z.B. Kopfzeile) verwendet wird und eine Verhaltensänderung dort
-   unbeabsichtigte Nebenwirkungen auf das bereits bekannte, separat
-   dokumentierte Kopfzeilen-Überlauf-Problem haben könnte. */
-.zz-thumb-fixed {
-  height: 4rem;
 }
 .h-2 {
   height: 0.5rem;
@@ -2102,11 +2120,16 @@ body {
 footer {
   flex-shrink: 0;
 }
-/* body color/background/font-family and .font-display now live in the
-   Leitsystem block at the end of this file (Archivo, near-black ink,
-   off-white ground) — the old Inter/Playfair Display pair was removed here
-   in the 2026-08 redesign to avoid two conflicting declarations in the
-   file. */
+body {
+  color: #1c1c1a;
+  background: #fafaf8;
+  font-family: Inter, sans-serif;
+}
+.font-display {
+  font-family:
+    Playfair Display,
+    serif;
+}
 @media print {
   header,
   nav,
@@ -3206,262 +3229,22 @@ footer {
   }
 }
 
-/* ========================================================================
-   LEITSYSTEM — Redesign (impeccable/new-work, 2026-08)
-   Direction: airport/transit wayfinding-signage. Off-white ground, near-
-   black ink, ONE signal-yellow reserved strictly for the primary action and
-   the current-item state — never decoration. One grotesk (Archivo)
-   throughout. See the direction-contract comment in index.html <body> and
-   DESIGN.md for the full brief. All rules below are additive/overriding on
-   top of the precompiled Tailwind output above (no build step — every
-   class app.js references must have its rule literally present in this
-   file, see the header comment at the top of this stylesheet).
-   ======================================================================== */
-
-/* --- Type: self-hosted Archivo (variable font, covers weights 400-700
-   from a single file; German umlauts included in the "latin" subset) --- */
-@font-face {
-  font-family: "Archivo";
-  src: url("fonts/archivo-latin-variable.woff2") format("woff2");
-  font-weight: 400 700;
-  font-style: normal;
-  font-display: swap;
-}
-
+/* ============================================================================
+   Farbwerte für die Tagesplanung im bisherigen (grünen) Design.
+   ============================================================================ */
 :root {
-  --zz-ground: #f5f5f4;
-  --zz-ink: #221f19;
-  --zz-yellow: #ffc933;
-  --zz-yellow-hover: #e6b52e;
+  --zz-ink: #1c1917;
+  --zz-ground: #fafaf8;
 }
-
-body {
-  color: var(--zz-ink);
-  background: var(--zz-ground);
-  font-family:
-    "Archivo",
-    system-ui,
-    sans-serif;
-}
-
-.font-display {
-  font-family:
-    "Archivo",
-    system-ui,
-    sans-serif;
-  font-weight: 700;
-}
-
-.bg-\[\#FAFAF8\] {
-  --tw-bg-opacity: 1;
-  background-color: var(--zz-ground) !important;
-}
-
-/* --- zz-neutral: monochrome warm-near-black scale (replaces the old
-   "emerald" brand green everywhere app.js was renamed this round). Used for
-   BOTH text color and button-background-with-white-text roles, so it stays
-   monochrome rather than literal yellow (yellow is reserved separately,
-   see .zz-cta / .zz-current below). Every value AA-verified against both
-   #FFFFFF and the page ground #F5F5F4. --- */
-.bg-zz-neutral-50 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(242 241 237 / var(--tw-bg-opacity));
-}
-.bg-zz-neutral-100 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(231 228 221 / var(--tw-bg-opacity));
-}
-.bg-zz-neutral-400 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(132 124 105 / var(--tw-bg-opacity));
-}
-.bg-zz-neutral-500 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(99 92 76 / var(--tw-bg-opacity));
-}
-.bg-zz-neutral-600 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(69 63 51 / var(--tw-bg-opacity));
-}
-.bg-zz-neutral-700 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(34 31 25 / var(--tw-bg-opacity));
-}
-.border-zz-neutral-200 {
-  --tw-border-opacity: 1;
-  border-color: rgb(210 205 194 / var(--tw-border-opacity));
-}
-.border-zz-neutral-300 {
-  --tw-border-opacity: 1;
-  border-color: rgb(173 166 149 / var(--tw-border-opacity));
-}
-.border-zz-neutral-600 {
-  --tw-border-opacity: 1;
-  border-color: rgb(69 63 51 / var(--tw-border-opacity));
-}
-.ring-zz-neutral-100 {
-  --tw-ring-opacity: 1;
-  --tw-ring-color: rgb(231 228 221/var(--tw-ring-opacity));
-}
-.text-zz-neutral-600 {
-  --tw-text-opacity: 1;
-  color: rgb(69 63 51 / var(--tw-text-opacity));
-}
-.text-zz-neutral-700 {
-  --tw-text-opacity: 1;
-  color: rgb(34 31 25 / var(--tw-text-opacity));
-}
-.text-zz-neutral-800 {
-  --tw-text-opacity: 1;
-  color: rgb(20 18 16 / var(--tw-text-opacity));
-}
-.focus-within\:ring-zz-neutral-500:focus-within {
-  --tw-ring-opacity: 1;
-  --tw-ring-color: rgb(99 92 76/var(--tw-ring-opacity));
-}
-.hover\:border-zz-neutral-400:hover {
-  --tw-border-opacity: 1;
-  border-color: rgb(132 124 105 / var(--tw-border-opacity));
-}
-.hover\:bg-zz-neutral-50:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(242 241 237 / var(--tw-bg-opacity));
-}
-.hover\:bg-zz-neutral-50\/40:hover {
-  background-color: #f2f1ed66;
-}
-.hover\:bg-zz-neutral-800:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(20 18 16 / var(--tw-bg-opacity));
-}
-.hover\:text-zz-neutral-600:hover {
-  --tw-text-opacity: 1;
-  color: rgb(69 63 51 / var(--tw-text-opacity));
-}
-.hover\:text-zz-neutral-700:hover {
-  --tw-text-opacity: 1;
-  color: rgb(34 31 25 / var(--tw-text-opacity));
-}
-.hover\:text-zz-neutral-800:hover {
-  --tw-text-opacity: 1;
-  color: rgb(20 18 16 / var(--tw-text-opacity));
-}
-.hover\:text-zz-neutral-900:hover {
-  --tw-text-opacity: 1;
-  color: rgb(10 9 8 / var(--tw-text-opacity));
-}
-.focus\:ring-zz-neutral-500:focus {
-  --tw-ring-opacity: 1;
-  --tw-ring-color: rgb(99 92 76/var(--tw-ring-opacity));
-}
-.focus-visible\:ring-zz-neutral-500:focus-visible {
-  --tw-ring-opacity: 1;
-  --tw-ring-color: rgb(99 92 76/var(--tw-ring-opacity));
-}
-
-/* --- The one accent: signal-yellow, reserved strictly for the primary
-   action (.zz-cta) and the current-item / active-nav state (.zz-current).
-   !important because both are applied alongside precompiled Tailwind
-   utility classes (bg-zz-neutral-700 etc.) of equal or higher cascade
-   position, including on :hover. --- */
-.zz-cta {
-  background-color: var(--zz-yellow) !important;
-  color: var(--zz-ink) !important;
-  border-color: var(--zz-yellow) !important;
-}
-.zz-cta:hover {
-  background-color: var(--zz-yellow-hover) !important;
-}
-
-.zz-current {
-  background-color: var(--zz-yellow) !important;
-  color: var(--zz-ink) !important;
-}
-
-/* --- Einkaufsliste: category headers as solid wayfinding panel bands
-   (icon + label), forming one continuous card with the white item list
-   below them. --- */
+.zz-cta { background-color: #047857; color: #fff; }
+.zz-cta:hover { background-color: #065f46; }
+.zz-current { background-color: #ecfdf5; color: #065f46; }
 .zz-panel-band {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background-color: var(--zz-ink);
-  color: var(--zz-ground);
-  font-size: 0.8125rem;
-  font-weight: 600;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  padding: 0.625rem 1rem;
-  margin: 0;
+  display: flex; align-items: center; gap: 0.5rem; margin: 0;
+  background-color: #047857; color: #fff; font-size: 0.8125rem; font-weight: 600;
+  letter-spacing: 0.03em; text-transform: uppercase; padding: 0.625rem 1rem;
   border-radius: 1rem 1rem 0 0;
 }
-.zz-panel-band svg {
-  flex-shrink: 0;
-  color: inherit;
-}
-
-/* --- Recipe-category badges: one disciplined neutral style, replacing the
-   old per-category rainbow (a craft-floor decoration violation, and
-   incompatible with "yellow is never decoration"). --- */
-.zz-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.125rem 0.5rem;
-  border-radius: 9999px;
-  background-color: rgb(231 228 221);
-  color: var(--zz-ink);
-  font-size: 0.75rem;
-  font-weight: 600;
-  border: 1px solid rgb(210 205 194);
-  line-height: 1.4;
-}
-
-/* --- Monumental tabular numerals: Wochenplan portion counts, Einkaufsliste
-   quantities. Large + tight + tabular so digit widths never jitter. --- */
-.zz-monumental-num {
-  font-size: 1.75rem;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  line-height: 1;
-  letter-spacing: -0.02em;
-}
-.zz-monumental-num-sm {
-  font-size: 1.125rem;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  line-height: 1;
-  letter-spacing: -0.01em;
-}
-
-/* --- Browser surfaces: the parts nobody drew still carry the design. --- */
-::selection {
-  background-color: var(--zz-yellow);
-  color: var(--zz-ink);
-}
-:focus-visible {
-  outline: 2px solid var(--zz-ink);
-  outline-offset: 2px;
-}
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-::-webkit-scrollbar-track {
-  background: var(--zz-ground);
-}
-::-webkit-scrollbar-thumb {
-  background: rgb(173 166 149);
-  border-radius: 8px;
-  border: 2px solid var(--zz-ground);
-}
-::-webkit-scrollbar-thumb:hover {
-  background: rgb(132 124 105);
-}
-* {
-  scrollbar-color: rgb(173 166 149) var(--zz-ground);
-  scrollbar-width: thin;
-}
-
 /* ============================================================================
    Tagesplanung, Drag and Drop, Verlauf (2026-11). Eigene zz-Klassen statt
    neuer Tailwind-Utilities, damit nichts still fehlt. Farben nur aus der
@@ -3550,7 +3333,7 @@ body {
 }
 .zz-chip:hover:not(:disabled) { border-color: var(--zz-ink); }
 .zz-chip:disabled { opacity: 1; cursor: default; }
-.zz-chip-on { background: rgb(34 31 25); border-color: rgb(34 31 25); color: #fff; }
+.zz-chip-on { background: #047857; border-color: #047857; color: #fff; }
 .zz-chip-wide { padding: 0 0.875rem; }
 .zz-day-add { display: block; }
 .zz-day-add select {
